@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#121311">
 <meta property="og:title" content="RILÁN">
 <meta property="og:description" content="Bienvenidos al misticismo del archipiélago.">
-<meta property="og:image" content="assets/og.jpg">
+<meta property="og:image" content="https://pabloignaciofigueroa.github.io/hotel_rilan/assets/og.jpg">
 <meta property="og:type" content="website">
 <link rel="icon" href="brand/logo/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="brand/logo/favicon.ico" sizes="48x48">
@@ -16,7 +16,7 @@
 <link rel="preload" href="assets/fonts/marcellus-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/newsreader-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" type="image/webp" imagesrcset="assets/img/web_rilan_35-s.webp 800w, assets/img/web_rilan_35-l.webp 1800w" imagesizes="100vw">
-<link rel="stylesheet" href="vendor/swiper-bundle.min.css">
+<link rel="stylesheet" href="vendor/swiper-bundle.min.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="css/main.css">
 <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -43,7 +43,7 @@
     <a class="t-label u-link" href="#heritage">Heritage</a>
   </nav>
   <div class="nav__end">
-    <button class="lang t-label" type="button" data-lang-toggle aria-label="Cambiar idioma / Change language"><span class="lang__es">ES</span><span class="lang__sep">/</span><span class="lang__en">EN</span></button>
+    <button class="lang t-label" type="button" data-lang-toggle aria-label="ES / EN: cambiar idioma, change language"><span class="lang__es">ES</span><span class="lang__sep">/</span><span class="lang__en">EN</span></button>
     <a class="btn btn--ghost t-label" href="#reservar" data-magnetic><span data-l="es">Reservar</span><span data-l="en">Book</span></a>
     <button class="burger" type="button" data-menu-open aria-expanded="false" aria-controls="menu"><span class="sr"><span data-l="es">Abrir menú</span><span data-l="en">Open menu</span></span><i></i><i></i></button>
   </div>
@@ -538,7 +538,6 @@
 <script src="vendor/gsap.min.js" defer></script>
 <script src="vendor/ScrollTrigger.min.js" defer></script>
 <script src="vendor/lenis.min.js" defer></script>
-<script src="vendor/swiper-bundle.min.js" defer></script>
 <script src="js/main.js" defer></script>
 </body>
 </html>

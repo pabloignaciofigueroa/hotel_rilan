@@ -159,8 +159,23 @@
     if (bar) bar.style.transform = `scaleX(${1 / total})`;
     return sw;
   };
-  const rooms = makeSlider($('[data-rooms]'), { spaceBetween: 18 }, 'rooms');
-  const reviews = makeSlider($('[data-reviews]'), { spaceBetween: 0, autoplay: reduced ? false : { delay: 6500, disableOnInteraction: true, pauseOnMouseEnter: true } }, 'reviews');
+  /* Swiper se carga solo cuando los sliders se acercan a la pantalla */
+  let swiperLoading = null;
+  const loadSwiper = () => swiperLoading || (swiperLoading = new Promise((res, rej) => {
+    if (window.Swiper) return res();
+    const sc = document.createElement('script');
+    sc.src = 'vendor/swiper-bundle.min.js'; sc.onload = res; sc.onerror = rej;
+    document.head.appendChild(sc);
+  }));
+  const lazySlider = (el, opts, prefix) => {
+    if (!el) return;
+    const init = () => loadSwiper().then(() => makeSlider(el, opts, prefix)).catch(() => {});
+    if (!('IntersectionObserver' in window)) return init();
+    const io = new IntersectionObserver((en) => { if (en[0].isIntersecting) { io.disconnect(); init(); } }, { rootMargin: '900px 0px' });
+    io.observe(el);
+  };
+  lazySlider($('[data-rooms]'), { spaceBetween: 18 }, 'rooms');
+  lazySlider($('[data-reviews]'), { spaceBetween: 0, autoplay: reduced ? false : { delay: 6500, disableOnInteraction: true, pauseOnMouseEnter: true } }, 'reviews');
 
   /* ---------- etiqueta "Arrastrar" que sigue al cursor ---------- */
   const drag = $('[data-drag]');
@@ -274,10 +289,10 @@
   const len = markPath.getTotalLength();
   gsap.set(markPath, { strokeDasharray: len, strokeDashoffset: len });
   const intro = gsap.timeline();
-  intro.to(markPath, { strokeDashoffset: 0, duration: 1.3, ease: 'power2.inOut' })
+  intro.to(markPath, { strokeDashoffset: 0, duration: .95, ease: 'power2.inOut' })
        .to('.loader__mark', { fill: '#EAE9E3', duration: .5, ease: 'power1.out' }, '-=.25')
        .to('.loader__mark rect', { opacity: 1, duration: .3 }, '<')
-       .fromTo('.loader__coords', { opacity: 0, letterSpacing: '.6em' }, { opacity: .8, letterSpacing: '.28em', duration: 1.1 }, '-=.8');
+       .fromTo('.loader__coords', { opacity: 0, letterSpacing: '.6em' }, { opacity: .8, letterSpacing: '.28em', duration: .9 }, '-=.7');
 
   Promise.all([imgReady, fontsReady, new Promise(r => intro.eventCallback('onComplete', r))]).then(() => {
     buildReveals();
