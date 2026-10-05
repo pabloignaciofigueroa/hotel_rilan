@@ -98,3 +98,8 @@ El sitio es bilingüe ES / EN con un selector. En español se usa el texto origi
 - En IG-02, "el misticismo del archipiélago se revelan" se corrige a "se revela", y "unfold" a "unfolds". Son correcciones gramaticales mínimas.
 - En IG-03, "let time loose its measure" se corrige a "lose".
 - La promoción "3 noches + 1" de IG-03 era de septiembre y no se publica.
+- En IG-02, "moldeados" se corrige a "moldeado", por concordancia con "se revela".
+- The Long Table (IG-17 y la pieza) va solo en español en ambos idiomas, porque la marca no publicó versión en inglés. La sección lleva lang="es".
+- Las reseñas se citan literalmente, con su ortografía original ("por si solo"). Si la cita sale de la mitad de una frase, se marca con "…" (Gonzalez). En el caso de Patrice se usa el título de su reseña.
+- Distancia al aeropuerto Mocopulli: 28–37 km, tal como aparece en Booking.
+- "Recomendamos llegar en auto" se eliminó porque la marca no lo publicó. Queda solo el dato de Booking: traslado al aeropuerto disponible.

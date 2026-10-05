@@ -61,6 +61,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 b { font-weight: inherit; }
 ::selection { background: var(--fuego); color: var(--niebla); }
 :focus-visible { outline: 1px solid currentColor; outline-offset: 6px; }
+html { overflow-x: clip; }
 html { scrollbar-color: var(--piedra) var(--noche); scrollbar-width: thin; }
 
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -286,7 +287,7 @@ html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .4; }
 .kitchen__title { font-size: var(--fs-h1); }
 .kitchen__lead { font-size: var(--fs-lead); font-weight: 300; line-height: 1.4; max-width: 30ch; }
 .kitchen__body { max-width: 40ch; color: color-mix(in srgb, var(--niebla) 78%, transparent); }
-.note { color: var(--fuego); }
+.note { color: var(--fuego); font-size: .78rem; }
 .mass { grid-column: 7 / span 6; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .mass__col { display: grid; gap: 16px; }
 .mass__col:nth-child(2) { margin-top: 18vh; }
@@ -304,15 +305,16 @@ html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .4; }
 .cava { position: relative; min-height: 120svh; display: grid; align-items: center; overflow: hidden; }
 .cava__media { position: absolute; inset: 0; }
 .cava__media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.2); }
-.cava__veil { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(18,19,17,.2), rgba(18,19,17,.75)); }
+.cava__veil { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(18,19,17,.45), rgba(18,19,17,.8)); }
 .cava__content { position: relative; padding: 0 var(--gut); display: grid; gap: clamp(40px, 8vh, 80px); justify-items: center; text-align: center; }
 .cava__title { font-size: var(--fs-mega); }
 .cava__quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px clamp(40px, 8vw, 140px); max-width: 1000px; }
 .cava__quotes p { font-size: var(--fs-lead); font-style: italic; font-weight: 300; line-height: 1.35; margin-bottom: 14px; }
-.cava__quotes footer { opacity: .7; }
+.cava__quotes footer { opacity: .95; font-size: .76rem; }
+.cava__quotes blockquote { text-shadow: 0 1px 16px rgba(18,19,17,.95), 0 0 3px rgba(18,19,17,.8); }
 
 /* ---------- the long table ---------- */
-.table { background: var(--piedra); color: var(--niebla); padding: var(--sec) var(--gut); display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: center; }
+.table { background: var(--piedra); color: var(--niebla); padding: var(--sec) var(--gut); overflow: hidden; display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: center; }
 .table[hidden] { display: none; }
 .table__card { grid-column: 1 / span 5; display: grid; gap: 26px; }
 .table__title { font-family: var(--f-display); font-weight: 400; text-transform: uppercase; letter-spacing: .06em; font-size: var(--fs-h1); line-height: 1.05; }
@@ -322,7 +324,7 @@ html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .4; }
 .table__rows li { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 16px 0; border-bottom: 1px solid color-mix(in srgb, var(--niebla) 30%, transparent); }
 .table__rows small { display: block; width: 100%; font-family: var(--f-text); text-transform: none; letter-spacing: 0; font-size: .95rem; opacity: .75; margin-top: 4px; }
 .table .btn { justify-self: start; }
-.table__gallery { grid-column: 7 / span 6; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.table__gallery { grid-column: 7 / span 6; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; min-width: 0; }
 .table__gallery figure { aspect-ratio: 3 / 4; }
 .table__gallery figure:last-child { margin-top: 14vh; }
 
