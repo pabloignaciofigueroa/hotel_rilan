@@ -1,9 +1,9 @@
 # Progreso
 
 estado: idle
-fase_actual: 20
+fase_actual: -
 inicio_ejecucion: -
-ultima_fase_completada: 19
+ultima_fase_completada: 20
 
 ## Bitácora
 - 2026-10-05 17:30 — Plan creado. Próxima: Fase 01.
@@ -14,3 +14,4 @@ ultima_fase_completada: 19
 - 18:50 — F16 micro-interacciones (menú con imágenes, etiqueta Arrastrar, botones magnéticos, hover en masas, barras de sonido) · F17 responsive 390/1280/1440/1920, foco visible, movimiento reducido verificado, acento de RILÁN corregido.
 - 19:05 — F18 performance/QA: Lighthouse (servidor local sin gzip) Perf 75–82 · A11y 96 · BP 100 · SEO 100; CLS 0.08. Swiper diferido, CSS no bloqueante, preload responsivo, imagen OG, sin errores de consola. Capturas en 390/1280/1440/1920.
 - 19:25 — F19 auditoría independiente (agente separado). Corregido: desborde horizontal en The Long Table (blocker), citas de reseñas literales (Gonzalez con elipsis, Mariana con su ortografía), The Long Table solo en ES, legibilidad de las citas de la cava, distancia al aeropuerto 28–37 km, nota de llegada reducida al dato de Booking. README.
+- 19:35 — F20 main publicado en GitHub; correo enviado a pabloignaciofigueroa@gmail.com. Pendiente manual: activar GitHub Pages y dejar main como rama por defecto (el entorno no permite cambiar la configuración del repo).
