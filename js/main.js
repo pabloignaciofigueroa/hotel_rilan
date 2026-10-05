@@ -333,9 +333,9 @@
   /* ---------- imágenes que entran con cortina ---------- */
   $$('[data-clip]').forEach(fig => {
     const img = $('img', fig);
-    gsap.timeline({ scrollTrigger: { trigger: fig, start: 'top 85%', once: true } })
-      .to(fig, { clipPath: 'inset(0% 0 0 0)', duration: 1.3, ease: 'expo.out' })
-      .to(img, { scale: 1, duration: 1.8, ease: 'expo.out' }, 0);
+    gsap.timeline({ scrollTrigger: { trigger: fig, start: 'top 85%', once: true }, onComplete: () => { fig.classList.add('is-in'); gsap.set([fig, img], { clearProps: 'clipPath,transform' }); } })
+      .fromTo(fig, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.3, ease: 'expo.out' })
+      .fromTo(img, { scale: 1.18 }, { scale: 1, duration: 1.8, ease: 'expo.out' }, 0);
   });
   /* parallax interno sutil (después de la entrada) */
   $$('[data-parallax-in]').forEach(img => {
