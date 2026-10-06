@@ -20,6 +20,7 @@
 <link rel="preload" href="assets/fonts/newsreader-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" type="image/webp" imagesrcset="assets/img/web_rilan_35-s.webp 800w, assets/img/web_rilan_35-l.webp 1800w" imagesizes="100vw">
 <link rel="stylesheet" href="vendor/swiper-bundle.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="vendor/leaflet.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="css/main.css">
 <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -483,8 +484,11 @@
 <section class="arrive" id="llegar" data-theme="dark" aria-labelledby="t-arrive">
   <div class="arrive__map">
     <x-img id="web_rilan_47" class="arrive__fallback" sizes="(min-width: 900px) 54vw, 100vw" alt="">
-    <iframe title="Mapa: RILÁN en la península de Rilán, Chiloé" data-title-en="Map: RILÁN on the Rilán Peninsula, Chiloé" loading="lazy" data-src="https://www.openstreetmap.org/export/embed.html?bbox=-73.86%2C-42.62%2C-73.58%2C-42.47&amp;layer=mapnik&amp;marker=-42.5486%2C-73.7211"></iframe>
-    <span class="arrive__pin" aria-hidden="true"></span>
+    <div class="arrive__leaflet" data-map data-lat="-42.5486" data-lng="-73.7211" data-zoom="12" role="region" aria-label="Mapa: RILÁN en la península de Rilán, Chiloé" data-aria-en="Map: RILÁN on the Rilán Peninsula, Chiloé"></div>
+    <p class="arrive__hint t-label" data-map-hint aria-hidden="true">
+      <span data-hint="wheel"><span data-l="es">Usa + y − para acercar el mapa</span><span data-l="en">Use + and − to zoom the map</span></span>
+      <span data-hint="touch"><span data-l="es">Usa dos dedos para mover el mapa</span><span data-l="en">Use two fingers to move the map</span></span>
+    </p>
   </div>
   <div class="arrive__text">
     <h2 class="arrive__title t-display" id="t-arrive" data-lines><span data-l="es">Cómo llegar</span><span data-l="en">Getting here</span></h2>

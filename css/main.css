@@ -368,9 +368,30 @@ html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .62; }
 .arrive { background: var(--noche); display: grid; grid-template-columns: 1.15fr 1fr; min-height: 100svh; }
 .arrive__map { position: relative; overflow: hidden; background: var(--bosque); }
 .arrive__fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(.6) brightness(.7); }
-.arrive__map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(1) contrast(.95) brightness(.85); }
-.arrive__pin { position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; background: var(--fuego); pointer-events: none; }
-.arrive__pin::after { content: ""; position: absolute; inset: -14px; border: 1px solid var(--fuego); animation: ping 2.4s var(--ease-out) infinite; }
+.arrive__leaflet { position: absolute; inset: 0; z-index: 1; background: transparent; font-family: var(--f-display); }
+.arrive__leaflet .leaflet-tile-pane { filter: grayscale(1) contrast(.95) brightness(.85); }
+.arrive__leaflet.leaflet-container { background: transparent; outline-offset: -6px; }
+/* marcador: el cuadrado pulsante va anclado a las coordenadas del hotel */
+.rilan-pin { position: relative; }
+.rilan-pin i { position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; background: var(--fuego); }
+.rilan-pin i::after { content: ""; position: absolute; inset: -14px; border: 1px solid var(--fuego); animation: ping 2.4s var(--ease-out) infinite; }
+/* controles con la estética de la marca */
+.arrive__leaflet .leaflet-bar { border: 0; border-radius: 0; box-shadow: none; display: grid; gap: 6px; background: none; }
+.arrive__leaflet .leaflet-bar a, .arrive__leaflet .leaflet-bar a:hover { width: 44px; height: 44px; line-height: 42px; border-radius: 0 !important; border: 1px solid color-mix(in srgb, var(--niebla) 45%, transparent); background: rgba(18,19,17,.78); color: var(--niebla); font: 300 1.4rem/42px var(--f-text); transition: background .3s var(--ease-out), color .3s var(--ease-out); }
+.arrive__leaflet .leaflet-bar a:hover { background: var(--niebla); color: var(--noche); }
+.arrive__leaflet .leaflet-bar a.leaflet-disabled { opacity: .35; }
+.arrive__leaflet .leaflet-control-zoom { margin: 20px 0 0 20px; }
+.map-home { margin: 0 20px 20px 0 !important; }
+.map-home button { display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px; background: rgba(18,19,17,.78); color: var(--niebla); border: 1px solid color-mix(in srgb, var(--niebla) 45%, transparent); font-family: var(--f-display); font-size: var(--fs-label); letter-spacing: .24em; text-transform: uppercase; transition: background .3s var(--ease-out), color .3s var(--ease-out); }
+.map-home button:hover, .map-home button:focus-visible { background: var(--niebla); color: var(--noche); }
+.map-home i { width: 8px; height: 8px; background: var(--fuego); }
+.arrive__leaflet .leaflet-control-attribution { background: rgba(18,19,17,.7); color: var(--bruma); font-family: var(--f-text); font-size: 10px; }
+.arrive__leaflet .leaflet-control-attribution a { color: var(--niebla); }
+/* aviso al intentar zoom con la rueda o mover con un dedo */
+.arrive__hint { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; text-align: center; padding: 24px; color: var(--niebla); background: rgba(18,19,17,.55); pointer-events: none; opacity: 0; transition: opacity .35s var(--ease-out); }
+.arrive__hint.is-on { opacity: 1; }
+.arrive__hint [data-hint] { display: none; }
+.arrive__hint[data-show="wheel"] [data-hint="wheel"], .arrive__hint[data-show="touch"] [data-hint="touch"] { display: inline; }
 @keyframes ping { from { transform: scale(.4); opacity: 1; } to { transform: scale(2.2); opacity: 0; } }
 .arrive__text { padding: clamp(96px, 12vh, 160px) var(--gut); display: grid; align-content: center; gap: 26px; }
 .arrive__title { font-size: var(--fs-h1); }

@@ -56,14 +56,88 @@
     if (Date.now() > Date.parse(el.dataset.eventUntil)) el.hidden = true;
   });
 
-  /* ---------- mapa diferido ---------- */
-  const iframe = $('.arrive__map iframe');
-  if (iframe && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver((en) => {
-      if (en[0].isIntersecting) { iframe.src = iframe.dataset.src; io.disconnect(); }
-    }, { rootMargin: '600px' });
-    io.observe(iframe);
-  } else if (iframe) iframe.src = iframe.dataset.src;
+  /* ---------- mapa (Leaflet): el marcador queda anclado a las coordenadas del hotel ---------- */
+  const mapEl = $('[data-map]');
+  const initMap = () => {
+    if (!mapEl || mapEl._map || !window.L) return;
+    const L = window.L;
+    const home = [parseFloat(mapEl.dataset.lat), parseFloat(mapEl.dataset.lng)];
+    const zoom = parseInt(mapEl.dataset.zoom || '12', 10);
+    const touch = window.matchMedia('(pointer: coarse)').matches;
+    const map = L.map(mapEl, {
+      center: home, zoom, minZoom: 6, maxZoom: 17,
+      scrollWheelZoom: false,          /* la rueda sigue bajando la página */
+      dragging: !touch,                /* en táctil: dos dedos (ver abajo) */
+      tap: false, zoomControl: true, attributionControl: true
+    });
+    mapEl._map = map;
+    map.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>');
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, subdomains: 'abc',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+    }).addTo(map);
+    const pin = L.marker(home, {
+      icon: L.divIcon({ className: 'rilan-pin', html: '<i></i>', iconSize: [14, 14], iconAnchor: [7, 7] }),
+      keyboard: false, title: 'RILÁN', alt: 'RILÁN'
+    }).addTo(map);
+    pin.on('click', () => map.flyTo(home, Math.max(map.getZoom(), 14), { duration: .8 }));
+
+    /* botón para volver al hotel */
+    const Home = L.Control.extend({
+      options: { position: 'bottomright' },
+      onAdd() {
+        const wrap = L.DomUtil.create('div', 'leaflet-control map-home');
+        wrap.innerHTML = '<button type="button"><i aria-hidden="true"></i><span data-l="es">Volver al hotel</span><span data-l="en">Back to the hotel</span></button>';
+        L.DomEvent.disableClickPropagation(wrap);
+        wrap.querySelector('button').addEventListener('click', () => map.flyTo(home, zoom, { duration: 1 }));
+        return wrap;
+      }
+    });
+    map.addControl(new Home());
+    const zin = mapEl.querySelector('.leaflet-control-zoom-in'), zout = mapEl.querySelector('.leaflet-control-zoom-out');
+    const zoomLabels = () => {
+      const en = root.dataset.lang === 'en';
+      zin && zin.setAttribute('aria-label', en ? 'Zoom in' : 'Acercar');
+      zout && zout.setAttribute('aria-label', en ? 'Zoom out' : 'Alejar');
+      zin && (zin.title = zin.getAttribute('aria-label')); zout && (zout.title = zout.getAttribute('aria-label'));
+    };
+    zoomLabels();
+    document.addEventListener('rilan:lang', zoomLabels);
+
+    /* avisos: la rueda no hace zoom; en táctil se mueve con dos dedos */
+    const hint = $('[data-map-hint]');
+    let hintT = 0;
+    const showHint = (kind) => {
+      if (!hint) return;
+      hint.dataset.show = kind; hint.classList.add('is-on');
+      clearTimeout(hintT); hintT = setTimeout(() => hint.classList.remove('is-on'), 1400);
+    };
+    mapEl.addEventListener('wheel', () => showHint('wheel'), { passive: true });
+    if (touch) {
+      mapEl.addEventListener('touchstart', (e) => {
+        if (e.touches.length >= 2) { map.dragging.enable(); hint && hint.classList.remove('is-on'); }
+        else { map.dragging.disable(); }
+      }, { passive: true });
+      mapEl.addEventListener('touchmove', (e) => { if (e.touches.length === 1) showHint('touch'); }, { passive: true });
+      mapEl.addEventListener('touchend', (e) => { if (e.touches.length < 2) map.dragging.disable(); }, { passive: true });
+    }
+    /* si el contenedor cambia de tamaño, el mapa se reajusta sin perder el hotel */
+    if ('ResizeObserver' in window) new ResizeObserver(() => map.invalidateSize()).observe(mapEl);
+  };
+  const loadMap = () => {
+    if (!mapEl || mapEl.dataset.loading) return;
+    mapEl.dataset.loading = '1';
+    if (window.L) return initMap();
+    const sc = document.createElement('script');
+    sc.src = 'vendor/leaflet.js';
+    sc.onload = initMap;
+    sc.onerror = () => { mapEl.remove(); }; /* queda la foto aérea de respaldo */
+    document.head.appendChild(sc);
+  };
+  if (mapEl && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((en) => { if (en[0].isIntersecting) { loadMap(); io.disconnect(); } }, { rootMargin: '700px 0px' });
+    io.observe(mapEl);
+  } else loadMap();
 
   /* ---------- sonido de la ballena ---------- */
   const listenVideo = $('[data-listen-video]');
