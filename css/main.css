@@ -122,7 +122,7 @@ html:not(.js) .loader { display: none; }
 .nav.on-light .btn--ghost:hover { color: var(--niebla); border-color: var(--piedra); }
 .lang { display: flex; gap: 6px; opacity: .9; }
 .lang span { transition: opacity .3s; }
-html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .4; }
+html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .62; }
 .lang__sep { opacity: .4; }
 .burger { display: none; width: 34px; height: 34px; position: relative; }
 .burger i { position: absolute; left: 6px; right: 6px; height: 1px; background: currentColor; transition: transform .4s var(--ease-out); }
@@ -288,13 +288,13 @@ html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .4; }
 .fire__b { font-size: var(--fs-lead); font-weight: 300; font-style: italic; max-width: 38ch; line-height: 1.45; }
 
 /* ---------- cocina ---------- */
-.kitchen { background: var(--noche); padding: var(--sec) var(--gut); display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: start; overflow: hidden; }
+.kitchen { background: var(--noche); padding: var(--sec) var(--gut); display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: start; overflow: clip; }
 .kitchen__text { grid-column: 1 / span 5; position: sticky; top: 18vh; display: grid; gap: 30px; }
 .kitchen__title { font-size: var(--fs-h1); }
 .kitchen__lead { font-size: var(--fs-lead); font-weight: 300; line-height: 1.4; max-width: 30ch; }
 .kitchen__body { max-width: 40ch; color: color-mix(in srgb, var(--niebla) 78%, transparent); }
 .note { color: var(--fuego); font-size: .78rem; }
-.mass { grid-column: 7 / span 6; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.mass { grid-column: 7 / span 6; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; min-width: 0; }
 .mass__col { display: grid; gap: 16px; }
 .mass__col:nth-child(2) { margin-top: 18vh; }
 .mass__col:nth-child(3) { margin-top: 8vh; }
@@ -419,6 +419,16 @@ html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .4; }
   .js [data-clip]:not(.is-in) img { transform: scale(1.18); }
 }
 
+/* sin animación (movimiento reducido o GSAP no disponible): todo visible y navegable */
+.no-motion .portal { height: auto; }
+.no-motion .portal__stage { position: relative; }
+.no-motion .portal__words b { opacity: 1; transform: none; filter: none; }
+.no-motion .portal__dot, .no-motion .portal__intro { display: none; }
+.no-motion .hscroll { height: auto !important; }
+.no-motion .hscroll__sticky { position: static; height: auto; overflow: visible; }
+.no-motion .hscroll__track { width: auto; overflow-x: auto; scroll-snap-type: x mandatory; padding-top: var(--sec); padding-bottom: var(--sec); height: auto; }
+.no-motion .hs, .no-motion .hs-quote { scroll-snap-align: center; }
+
 /* =========================================================
    RESPONSIVE
    ========================================================= */
@@ -466,7 +476,7 @@ html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .4; }
   .room--p { width: 64vw !important; }
 
   .kitchen__text { position: relative; top: 0; margin-bottom: 60px; }
-  .mass { grid-template-columns: 1fr 1fr; }
+  .mass { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .mass__col:nth-child(3) { display: none; }
   .cocktail__fig2 { width: 46%; justify-self: end; margin-top: 8px; }
 

@@ -6,7 +6,16 @@
   'use strict';
 
   const root = document.documentElement;
-  const loaderSafety = setTimeout(() => { const l = document.querySelector('.loader'); if (l) l.remove(); }, 7000);
+  /* posición estable del scroll: se congela mientras la ventana cambia de tamaño */
+  let stableY = window.scrollY, resizing = false, resizeT = 0, resizeFromY = null;
+  window.addEventListener('scroll', () => { if (!resizing) stableY = window.scrollY; }, { passive: true });
+  window.addEventListener('resize', () => {
+    if (!resizing) { resizing = true; resizeFromY = stableY; }
+    clearTimeout(resizeT);
+    resizeT = setTimeout(() => { resizing = false; resizeFromY = null; stableY = window.scrollY; }, 1200);
+  });
+  let finishIntro = () => { const l = document.querySelector('.loader'); if (l) l.remove(); };
+  const loaderSafety = setTimeout(() => finishIntro(), 7000);
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const desktop = window.matchMedia('(min-width: 900px)');
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -39,8 +48,7 @@
     document.dispatchEvent(new CustomEvent('rilan:lang'));
   };
   const saved = store.get('rilan-lang');
-  const browserEn = !saved && navigator.language && !navigator.language.toLowerCase().startsWith('es');
-  setLang(saved || (browserEn ? 'en' : 'es'));
+  setLang(saved === 'en' ? 'en' : 'es');
   $('[data-lang-toggle]')?.addEventListener('click', () => setLang(root.dataset.lang === 'es' ? 'en' : 'es'));
 
   /* ---------- evento con fecha ---------- */
@@ -84,6 +92,10 @@
       });
     }, { threshold: .15 }).observe(v);
   };
+  if (listenVideo && listenVideo.dataset.poster && 'IntersectionObserver' in window) {
+    const po = new IntersectionObserver((en) => { if (en[0].isIntersecting) { listenVideo.poster = listenVideo.dataset.poster; po.disconnect(); } }, { rootMargin: '1200px 0px' });
+    po.observe(listenVideo);
+  } else if (listenVideo && listenVideo.dataset.poster) listenVideo.poster = listenVideo.dataset.poster;
   playInView(listenVideo, () => { if (!listenVideo.muted) setSound(false); });
   playInView($('[data-portal-video]'));
 
@@ -91,10 +103,13 @@
   const menu = $('[data-menu]');
   const openBtn = $('[data-menu-open]');
   let menuOpen = false;
+  const outside = () => $$('main, .foot, .nav, .skip');
   const toggleMenu = (open) => {
     if (open === menuOpen) return;
     menuOpen = open;
     openBtn.setAttribute('aria-expanded', String(open));
+    if (window.gsap) { gsap.killTweensOf(menu); gsap.killTweensOf($$('.menu__w', menu)); }
+    outside().forEach(el => { el.inert = open; });
     if (open) {
       menu.hidden = false;
       lenis && lenis.stop();
@@ -111,7 +126,17 @@
   };
   openBtn?.addEventListener('click', () => toggleMenu(true));
   $('[data-menu-close]')?.addEventListener('click', () => toggleMenu(false));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menuOpen) toggleMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (!menuOpen) return;
+    if (e.key === 'Escape') { toggleMenu(false); return; }
+    if (e.key === 'Tab') { /* el foco se queda dentro del menú */
+      const f = $$('a, button', menu).filter(x => x.offsetParent);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
   $$('[data-menu-key]').forEach(a => {
     const show = () => $$('[data-menu-img]').forEach(i => i.classList.toggle('is-on', i.dataset.menuImg === a.dataset.menuKey));
     a.addEventListener('mouseenter', show);
@@ -140,6 +165,8 @@
       if (!t) return;
       e.preventDefault();
       scrollToEl(t);
+      if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+      t.focus({ preventScroll: true });
     });
   });
 
@@ -199,8 +226,8 @@
   $$('[data-reviews]').forEach(el => lazySlider(el, { spaceBetween: 0, autoplay: reduced ? false : { delay: 6500, disableOnInteraction: true, pauseOnMouseEnter: true } }, 'reviews'));
   document.addEventListener('rilan:lang', () => {
     $$('[data-rooms], [data-reviews]').forEach(el => {
-      if (!el.offsetParent) return;
-      if (el.swiper) { Object.assign(el.swiper.params.a11y, a11yMsgs()); el.swiper.update(); }
+      if (!el.offsetParent) { if (el.swiper && el.swiper.autoplay) el.swiper.autoplay.stop(); return; }
+      if (el.swiper) { Object.assign(el.swiper.params.a11y, a11yMsgs()); el.swiper.update(); if (el.swiper.params.autoplay && el.swiper.params.autoplay.delay) el.swiper.autoplay.start(); }
       else if (el._initSlider && el.getBoundingClientRect().top < window.innerHeight * 3) el._initSlider();
     });
   });
@@ -252,6 +279,7 @@
     clearTimeout(loaderSafety);
     $$('[data-clip]').forEach(f => f.classList.add('is-in'));
     $('[data-portal-window]')?.style.setProperty('clip-path', 'none');
+    root.classList.add('no-motion');
     navTheme();
     return;
   }
@@ -315,9 +343,9 @@
   });
   const fontsReady = document.fonts
     ? Promise.race([
-        Promise.all(['400 1em Marcellus', '300 1em Newsreader', 'italic 300 1em Newsreader', '400 1em Newsreader', 'italic 400 1em Newsreader', '500 1em Newsreader'].map(f => document.fonts.load(f))),
+        Promise.allSettled(['400 1em Marcellus', '300 1em Newsreader', 'italic 300 1em Newsreader', '400 1em Newsreader', 'italic 400 1em Newsreader'].map(f => document.fonts.load(f))),
         new Promise(r => setTimeout(r, 2500))
-      ]).then(() => document.fonts.ready)
+      ]).then(() => document.fonts.ready).catch(() => {})
     : Promise.resolve();
 
   gsap.set('.hero__letters span', { yPercent: 105 });
@@ -331,16 +359,20 @@
        .to('.loader__mark rect', { opacity: 1, duration: .3 }, '<')
        .fromTo('.loader__coords', { opacity: 0, letterSpacing: '.6em' }, { opacity: .8, letterSpacing: '.28em', duration: .9 }, '-=.7');
 
-  Promise.all([imgReady, fontsReady, new Promise(r => intro.eventCallback('onComplete', r))]).then(() => {
-    buildReveals();
+  let introDone = false;
+  finishIntro = () => {
+    if (introDone) return;
+    introDone = true;
     clearTimeout(loaderSafety);
-    const tl = gsap.timeline({ onComplete: () => { loader.remove(); lenis && lenis.start(); } });
+    try { buildReveals(); } catch (e) { /* el contenido sigue visible aunque falle la división */ }
+    const tl = gsap.timeline({ onComplete: () => { loader && loader.remove(); lenis && lenis.start(); } });
     tl.to(loader, { clipPath: 'inset(0 0 100% 0)', duration: 1.1, ease: 'power3.inOut' })
       .fromTo('[data-hero-media] img', { scale: 1.18 }, { scale: 1, duration: 2.2, ease: 'expo.out' }, '-=.75')
       .to('.hero__letters span', { yPercent: 0, duration: 1.3, stagger: .07, ease: 'expo.out' }, '-=1.9')
       .to('[data-hero-fade]', { opacity: 1, duration: 1.2, stagger: .1, ease: 'power2.out' }, '-=1');
     ScrollTrigger.refresh();
-  });
+  };
+  Promise.all([imgReady, fontsReady, new Promise(r => intro.eventCallback('onComplete', r))]).then(() => finishIntro(), () => finishIntro());
 
   /* hero: al salir, la imagen se hunde y el título se separa */
   gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
@@ -350,6 +382,8 @@
 
   /* ---------- la ventana Λ (momento principal) ---------- */
   const portal = $('[data-portal]');
+  const portalWords = () => $$('[data-word]').filter(w => w.offsetParent);
+  let wordsTl = null;
   if (portal) {
     const mm = gsap.matchMedia();
     mm.add({ d: '(min-width: 900px)', m: '(max-width: 899px)' }, (ctx) => {
@@ -365,15 +399,15 @@
         .to('[data-portal-intro]', { opacity: 0, x: -40, ease: 'power2.in', duration: .3 }, 0)
         .fromTo('.portal__video', { scale: ctx.conditions.d ? 1.25 : 1.15 }, { scale: 1, ease: 'none', duration: 1 }, 0)
         .to('[data-portal-shade]', { opacity: 1, duration: .3, ease: 'none' }, .75);
-      const words = () => $$('[data-word]').filter(w => w.offsetParent);
-      const wtl = gsap.timeline({ scrollTrigger: { trigger: portal, start: '62% bottom', end: 'bottom bottom', scrub: .4 } });
-      wtl.to(words(), { opacity: 1, y: 0, filter: 'blur(0px)', stagger: .25, duration: .5, ease: 'power2.out' });
-      document.addEventListener('rilan:lang', () => {
-        gsap.set($$('[data-word]'), { clearProps: 'all' });
-        wtl.clear(); wtl.to(words(), { opacity: 1, y: 0, filter: 'blur(0px)', stagger: .25, duration: .5, ease: 'power2.out' });
-        ScrollTrigger.refresh();
-      });
-      return () => {};
+      wordsTl = gsap.timeline({ scrollTrigger: { trigger: portal, start: '62% bottom', end: 'bottom bottom', scrub: .4 } });
+      wordsTl.to(portalWords(), { opacity: 1, y: 0, filter: 'blur(0px)', stagger: .25, duration: .5, ease: 'power2.out' });
+      return () => { wordsTl = null; };
+    });
+    document.addEventListener('rilan:lang', () => {
+      if (!wordsTl) return;
+      gsap.set($$('[data-word]'), { clearProps: 'all' });
+      wordsTl.clear(); wordsTl.to(portalWords(), { opacity: 1, y: 0, filter: 'blur(0px)', stagger: .25, duration: .5, ease: 'power2.out' });
+      ScrollTrigger.refresh();
     });
   }
 
@@ -402,6 +436,20 @@
   $$('[data-parallax-bg]').forEach(m => {
     gsap.fromTo(m, { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: m.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
   });
+
+  /* ---------- conservar la posición al cruzar el quiebre móvil/escritorio ---------- */
+  const restoreTo = (y) => {
+    const go = () => {
+      if (Math.abs(window.scrollY - y) < 40) return;
+      if (lenis) lenis.scrollTo(y, { immediate: true, force: true }); else window.scrollTo(0, y);
+      stableY = y; ScrollTrigger.update();
+    };
+    /* GSAP rehace sus animaciones al cambiar de quiebre; se restaura cuando terminó */
+    requestAnimationFrame(() => requestAnimationFrame(go));
+    setTimeout(go, 450);
+    setTimeout(go, 1000);
+  };
+  desktop.addEventListener('change', () => restoreTo(resizeFromY !== null ? resizeFromY : stableY));
 
   /* ---------- galería horizontal (escritorio) ---------- */
   const hs = $('[data-hscroll]');

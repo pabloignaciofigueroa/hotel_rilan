@@ -18,7 +18,6 @@
 <link rel="preload" href="assets/fonts/newsreader-latin-300-italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/newsreader-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/newsreader-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/newsreader-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" type="image/webp" imagesrcset="assets/img/web_rilan_35-s.webp 800w, assets/img/web_rilan_35-l.webp 1800w" imagesizes="100vw">
 <link rel="stylesheet" href="vendor/swiper-bundle.min.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="css/main.css">
@@ -53,7 +52,8 @@
   </div>
 </header>
 
-<div class="menu" id="menu" data-menu hidden>
+<div class="menu" id="menu" data-menu role="dialog" aria-modal="true" aria-label="Menú" data-aria-en="Menu" hidden>
+  <button class="menu__close t-label" type="button" data-menu-close><span data-l="es">Cerrar</span><span data-l="en">Close</span></button>
   <div class="menu__media" aria-hidden="true">
     <x-img id="ig_2026-09-23_DdoqxbhxKbG" class="is-on" sizes="50vw" alt="" data='data-menu-img="territory"'>
     <x-img id="ig_2026-09-02_DczRbckRl74" sizes="50vw" alt="" data='data-menu-img="mysticism"'>
@@ -71,7 +71,6 @@
     <a href="#llegar" data-menu-key="llegar"><span class="menu__w"><span data-l="es">Cómo llegar</span><span data-l="en">Getting here</span></span></a>
   </nav>
   <p class="menu__coords t-label">42° 32' 55" S&nbsp;&nbsp;&nbsp;73° 43' 16" O</p>
-  <button class="menu__close t-label" type="button" data-menu-close><span data-l="es">Cerrar</span><span data-l="en">Close</span></button>
 </div>
 
 <div class="progress" aria-hidden="true"><i data-progress></i></div>
@@ -220,7 +219,7 @@
 </section>
 
 <section class="listen" data-theme="dark" aria-labelledby="t-listen">
-  <video class="listen__video" data-listen-video muted playsinline loop preload="none" poster="assets/video/chilwe-poster.jpg" aria-label="Ballena jorobada saltando en el mar interior de Chiloé" data-aria-en="Humpback whale breaching in the inland sea of Chiloé">
+  <video class="listen__video" data-listen-video muted playsinline loop preload="none" data-poster="assets/video/chilwe-poster.jpg" aria-label="Ballena jorobada saltando en el mar interior de Chiloé" data-aria-en="Humpback whale breaching in the inland sea of Chiloé">
     <source src="assets/video/chilwe-se-escucha.webm" type="video/webm">
     <source src="assets/video/chilwe-se-escucha.mp4" type="video/mp4">
   </video>
@@ -297,7 +296,7 @@
       <figure class="swiper-slide room"><div class="frame"><x-img id="web_rilan_12" sizes="(min-width: 900px) 56vw, 86vw" alt="Habitación con dos camas individuales"></div></figure>
     </div>
     <div class="rooms__ui">
-      <p class="count t-label" aria-live="polite"><span data-count-cur>01</span> / <span data-count-tot>09</span></p>
+      <p class="count t-label" aria-hidden="true"><span data-count-cur>01</span> / <span data-count-tot>09</span></p>
       <div class="rooms__bar"><i data-rooms-bar></i></div>
       <div class="arrows">
         <button class="arrow" type="button" data-rooms-prev aria-label="Anterior" data-aria-en="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -338,7 +337,7 @@
     </p>
     <p class="note t-label"><span data-l="es">Solo cena · Se coordina cada día hasta las 15:30 h</span><span data-l="en">Dinner only · Arranged daily until 3:30 pm</span></p>
   </div>
-  <div class="mass" data-mass aria-label="Platos de Rucalaf" data-aria-en="Dishes by Rucalaf">
+  <div class="mass" data-mass role="group" aria-label="Platos de Rucalaf" data-aria-en="Dishes by Rucalaf">
     <div class="mass__col" data-speed="-14">
       <figure><div class="frame"><x-img id="ig_2026-09-10_DdHRZK0RRZJ" sizes="(min-width: 900px) 18vw, 45vw" alt="Plato de mariscos en caldo verde, servido en cerámica"></div></figure>
       <figure><div class="frame"><x-img id="web_rilan_32" sizes="(min-width: 900px) 18vw, 45vw" alt="Ostras frescas sobre hielo con limón"></div></figure>
@@ -467,7 +466,7 @@
       <blockquote class="swiper-slide review"><p>“El refugio perfecto en Chiloé! Exquisita comida, hermosa decoración e infraestructura ideal para descansar y desconectarse.”</p><footer class="t-label">África · Chile</footer></blockquote>
     </div>
     <div class="hosts__ui">
-      <p class="count t-label" aria-live="polite"><span data-count-cur>01</span> / <span data-count-tot>05</span></p>
+      <p class="count t-label" aria-hidden="true"><span data-count-cur>01</span> / <span data-count-tot>05</span></p>
       <div class="arrows">
         <button class="arrow" type="button" data-reviews-prev aria-label="Anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
         <button class="arrow" type="button" data-reviews-next aria-label="Siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
@@ -483,7 +482,7 @@
       <blockquote class="swiper-slide review"><p>“The most perfect, restful retreat in Chiloe.”</p><footer class="t-label">Gary · United States</footer></blockquote>
     </div>
     <div class="hosts__ui">
-      <p class="count t-label" aria-live="polite"><span data-count-cur>01</span> / <span data-count-tot>05</span></p>
+      <p class="count t-label" aria-hidden="true"><span data-count-cur>01</span> / <span data-count-tot>05</span></p>
       <div class="arrows">
         <button class="arrow" type="button" data-reviews-prev aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
         <button class="arrow" type="button" data-reviews-next aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>

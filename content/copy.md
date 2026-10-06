@@ -103,3 +103,12 @@ El sitio es bilingüe ES / EN con un selector. En español se usa el texto origi
 - Las reseñas se citan literalmente, con su ortografía original ("por si solo"). Si la cita sale de la mitad de una frase, se marca con "…" (Gonzalez). En el caso de Patrice se usa el título de su reseña.
 - Distancia al aeropuerto Mocopulli: 28–37 km, tal como aparece en Booking.
 - "Recomendamos llegar en auto" se eliminó porque la marca no lo publicó. Queda solo el dato de Booking: traslado al aeropuerto disponible.
+
+## Revisión del 5 oct, noche
+- El idioma por defecto es español. El sitio solo pasa a inglés si el visitante lo elige con el selector, y la elección se recuerda.
+- Las reseñas van por idioma. En español se muestran Velasquez, José, Mariana, Karen y África; en inglés, Morgan, Cezanne, Chandler, Erin y Gary. Ya no se muestran reseñas en francés ni alemán. Todas son citas literales de Booking.
+- La cava también va por idioma: en español, Gonzalez y Jaqueline; en inglés, Veronica y Chandler.
+- Portada: en español la línea inferior dice "Península de Rilán · Archipiélago de Chiloé · Chile". La bio de Instagram (en inglés) se muestra solo en la versión en inglés.
+- Mysticism: en español se usa la frase literal de IG-15 ("Árboles nativos, tierra húmeda, luz cambiante y el misticismo silencioso…"). En inglés se mantiene el texto de la destacada.
+- Los textos alternativos de imágenes y las etiquetas de accesibilidad están en los dos idiomas (`tools/alt-en.json` y atributos `data-*-en`).
+- Siguen en inglés por decisión de marca: los nombres de capítulo (Territory, Mysticism, Refuge, Heritage, igual que las destacadas) y "The Long Table" (nombre del evento).
