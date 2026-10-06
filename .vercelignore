@@ -1,0 +1,5 @@
+dossier/
+_plan/
+_qa/
+content/*.csv
+content/*.json
