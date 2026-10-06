@@ -127,7 +127,7 @@ def lamina_seccion(n, nombre, titulo, lead, desk, mob, bloques, nota_izq='', des
     return f'''
 <article class="lam">
   <div class="L {'two' if desk2 else ''}">
-    <p class="lab">Sitio · escritorio</p>
+    <p class="lab">Sitio · computador</p>
     <img class="desk" src="{shot(desk)}" alt="">
     {left_extra}
     <div class="Lrow">
@@ -198,7 +198,7 @@ L.append(lamina_libre(n,
       <p>Tampoco hay fotos de banco de imágenes. Todas las imágenes y los dos videos son de RILÁN, y la tipografía, los colores y el isotipo se reconstruyeron a partir de sus propias piezas gráficas.</p>
       <p>Este documento explica, sección por sección, qué se decidió y por qué. En cada lámina, a la izquierda está la sección tal como se ve en el sitio, en computador y en celular. A la derecha, de dónde salió cada texto e imagen, qué letra y qué color se usó, cómo se compuso y por qué va en ese lugar del recorrido.</p>
       <p>Es un regalo. Ojalá lo disfruten tanto como nosotros disfrutamos haciéndolo.</p>
-      <p class="sign">Pablo Figueroa</p>
+      <p class="sign">Pablo Figueroa G.<br>Director de estudio</p>
     </div>''', left_cls='full'))
 
 # 03 · De dónde viene todo
@@ -220,9 +220,9 @@ L.append(lamina_libre(n,
     <div class="grid">
       {block('Instagram @rilanhotel', '<p><b>17 publicaciones</b>, con sus textos completos en español e inglés, y <b>2 videos</b>: el reel de bienvenida y el paisaje sonoro submarino.</p>')}
       {block('Historias destacadas', '<p><b>4 destacadas, 18 imágenes.</b> Sus nombres (Territory, Mysticism, Refuge, Heritage) se convirtieron en los cuatro capítulos del sitio.</p>')}
-      {block('Galería de fotos', '<p><b>41 fotografías</b> de la galería del hotel. De Booking se rescataron las versiones de mayor resolución, de hasta 3000 px.</p>')}
+      {block('Galería de fotos', '<p><b>41 fotografías</b> de la galería del hotel. De Booking se rescataron en su mayor tamaño, para que se vean nítidas a pantalla completa.</p>')}
       {block('Booking.com', '<p><b>99 reseñas</b> con nota 9,5, Excepcional, y la ficha del hotel: horarios, normas, distancias y habitación. Son los únicos datos "duros" del sitio.</p>')}
-      {block('La regla', '<p>Todo texto visible tiene su fuente anotada en el archivo <i>copy.md</i> del proyecto. Las reseñas se citan literalmente, en su idioma original y con su ortografía. Solo se corrigieron tres concordancias gramaticales, todas registradas.</p>', 'wide')}
+      {block('La regla', '<p>Cada texto del sitio tiene su origen identificado: qué post, qué destacada o qué reseña. Las reseñas se citan tal cual, en su idioma original y con su ortografía. Solo se corrigieron tres concordancias gramaticales en textos de RILÁN.</p>', 'wide')}
     </div>'''))
 
 # 04 · La voz
@@ -233,7 +233,7 @@ L.append(lamina_libre(n,
     <div class="pair"><img src="{src('ig_2026-10-03_DeCNBLVEfM9_03', 600)}" alt=""><img src="{src('ig-destacada_MYSTICISM_02', 600)}" alt=""></div>''',
     f'''<p class="kick">Sistema · voz</p>
     <h2>Escribir como RILÁN</h2>
-    <p class="lead">El sitio funciona como un ghostwriter: no agrega adjetivos ni promesas. Toma la voz que la marca ya construyó y la pone en el lugar justo.</p>
+    <p class="lead">El sitio no agrega adjetivos ni promesas: escribe con la voz que la marca ya construyó y pone cada frase en el lugar justo.</p>
     <div class="grid">
       {block('Frases cortas, enumeraciones de materia', quote('La madera, el fuego, el patrimonio, el silencio.', IG['02']) + quote('El viento, las aves, la madera, el agua, el bosque.', IG['11']))}
       {block('Un vocabulario propio', '<p>Territorio, misticismo, archipiélago, refugio, ritmo, retornar. Y dos palabras locales que se mantuvieron tal cual: <b>Chilwe</b>, en lugar de "Chiloé", cuando ustedes la usan, y <b>bordemar</b>.</p>')}
@@ -250,18 +250,18 @@ L.append(lamina_libre(n,
     <p class="lab" style="margin-top:.2in">Equivalentes elegidas para la web</p>
     <div class="spec">
       <p class="sp1">THE LONG TABLE</p><p class="cap">Marcellus · títulos y rótulos en mayúsculas espaciadas</p>
-      <p class="sp2">Una mesa larga y abierta a todos. Cocina de campo y mar del archipiélago.</p><p class="cap">Newsreader 300 · texto de lectura</p>
-      <p class="sp3">42° 32' 55" S&nbsp;&nbsp;73° 43' 16" O</p><p class="cap">Marcellus · 0,72 rem · espaciado 0,28 em · coordenadas y rótulos</p>
+      <p class="sp2">Una mesa larga y abierta a todos. Cocina de campo y mar del archipiélago.</p><p class="cap">Newsreader liviana · texto de lectura</p>
+      <p class="sp3">42° 32' 55" S&nbsp;&nbsp;73° 43' 16" O</p><p class="cap">Marcellus pequeña y muy espaciada · coordenadas y rótulos</p>
     </div>''',
     f'''<p class="kick">Sistema · tipografía</p>
     <h2>Dos letras, las suyas</h2>
-    <p class="lead">El sitio actual no estaba en línea, así que identificamos la tipografía comparando sus piezas gráficas con decenas de candidatas de licencia libre, una al lado de la otra.</p>
+    <p class="lead">El sitio actual no estaba en línea, así que identificamos la tipografía comparando sus piezas gráficas con decenas de candidatas de uso libre, una al lado de la otra.</p>
     <div class="grid">
       {block('Marcellus · títulos', '<p>Es una romana tallada, de trazos que se abren hacia los remates, muy cercana a las mayúsculas de THE LONG TABLE, MENÚ y de sus destacadas. Se usa solo en mayúsculas espaciadas: nombres de capítulo, títulos y coordenadas.</p>')}
-      {block('Newsreader · lectura', '<p>Es una serif con altura generosa y números de estilo antiguo ($70.000), como el texto de sus piezas. Se usa en peso liviano (300) para títulos largos y en 400 para párrafos, sin negritas.</p>')}
-      {block('Escala', '<p>Palabra de capítulo: hasta 10,5 rem, con 0,12 em de espaciado.<br>Títulos: 2,1 a 4,6 rem, con interlineado de 1,08.<br>Párrafos: 1,06 a 1,25 rem, con interlineado de 1,6.<br>Rótulos: 0,72 rem, con 0,28 em de espaciado.</p>')}
+      {block('Newsreader · lectura', '<p>Es una serif con altura generosa y números de estilo antiguo ($70.000), como el texto de sus piezas. Se usa en su versión liviana para títulos largos y en la normal para párrafos, sin negritas.</p>')}
+      {block('Tamaños', '<p>Pocos tamaños y muy contrastados: las palabras de capítulo, enormes, casi como paisaje; los títulos, grandes y apretados; los párrafos, cómodos y con mucho espacio entre líneas; los rótulos, pequeños y muy espaciados.</p>')}
       {block('Descartadas', '<p>Cinzel, Cormorant, Forum y Tenor Sans se compararon y quedaron fuera: eran demasiado ornamentales o demasiado geométricas frente a la letra de RILÁN.</p>')}
-      {block('Detalle técnico', '<p>Las fuentes se alojan en el mismo sitio, sin servicios externos, y se cargan antes de levantar la cortina. Así el texto nunca "salta" al cambiar de letra.</p>', 'wide')}
+      {block('Un detalle', '<p>Las letras viajan con el propio sitio y ya están listas cuando se abre la portada. Así el texto nunca cambia de forma mientras se lee.</p>', 'wide')}
     </div>'''))
 
 # 06 · Paleta
@@ -275,19 +275,19 @@ L.append(lamina_libre(n,
     </div>''',
     f'''<p class="kick">Sistema · color</p>
     <h2>La paleta está en sus fotos</h2>
-    <p class="lead">No elegimos colores "de diseño". Medimos los tonos dominantes de sus fotografías y de sus piezas gráficas, agrupando miles de píxeles con un algoritmo de agrupamiento (k-means).</p>
+    <p class="lead">No elegimos colores "de diseño". Medimos los tonos que más se repiten en sus fotografías y en sus piezas gráficas, y de ahí salió la paleta.</p>
     <div class="grid">
       {block('Base de marca', chips([('Niebla', '#EAE9E3'), ('Piedra', '#544F4C'), ('Ceniza', '#847F7B')]) + '<p>El fondo claro y el gris cálido de sus piezas gráficas: son el 90 % del color de THE LONG TABLE.</p>')}
       {block('Territorio', chips([('Noche', '#121311'), ('Bosque', '#2C362F'), ('Madera', '#644B34')]) + '<p>Las sombras de los exteriores, el verde de los helechos y la madera de los muros.</p>')}
       {block('Un solo acento', chips([('Fuego', '#B07436')]) + '<p>Es el cobre del fuego y de la luz cálida de los interiores. Se usa con mesura: en la barra de avance, en el marcador del mapa y en pequeñas notas. Nunca en textos largos.</p>')}
-      {block('Legibilidad', '<p>Todos los pares de texto y fondo se verificaron por cálculo: piedra sobre niebla da 6,6:1, y niebla sobre noche, 15,3:1. Ambos superan el estándar de accesibilidad.</p>')}
+      {block('Legibilidad', '<p>Cada combinación de texto y fondo se revisó para que se lea con holgura, incluso con poca vista o con el sol sobre la pantalla.</p>')}
     </div>'''))
 
 # 07 · Isotipo
 nx()
 L.append(lamina_libre(n,
     f'''<div class="logos">
-      <p class="lab" style="grid-column:1/-1;margin-bottom:4pt">Reconstrucción vectorial · variantes de uso</p>
+      <p class="lab" style="grid-column:1/-1;margin-bottom:4pt">Isotipo redibujado · variantes de uso</p>
       <div class="lg light"><img src="{png_file('brand/logo/png/rilan-isotipo-dark.png', 500)}" alt=""></div>
       <div class="lg dark"><img src="{png_file('brand/logo/png/rilan-isotipo-light.png', 500)}" alt=""></div>
       <div class="lg light wide"><img src="{png_file('brand/logo/png/rilan-horizontal-dark.png', 1100)}" alt=""></div>
@@ -296,11 +296,11 @@ L.append(lamina_libre(n,
     </div>''',
     f'''<p class="kick">Sistema · isotipo</p>
     <h2>Λ. a cualquier tamaño</h2>
-    <p class="lead">El isotipo, una A sin travesaño con un punto cuadrado bajo el vértice, se midió sobre una de sus piezas ampliada y se redibujó en vectores para que sea nítido desde un ícono de 16 px hasta un cartel.</p>
+    <p class="lead">El isotipo, una A sin travesaño con un punto cuadrado bajo el vértice, se midió sobre una de sus piezas ampliada y se redibujó para que sea nítido a cualquier tamaño, desde el ícono de la pestaña del navegador hasta un letrero.</p>
     <div class="grid">
       {block('Proporciones respetadas', '<p>El trazo izquierdo es más fino que el derecho, como en el original. El punto es un cuadrado centrado y el vértice va levemente aplanado.</p>')}
-      {block('Variantes', '<p>Isotipo, logotipo RILÁN, versión vertical (como en las destacadas) y horizontal, cada una en claro y oscuro. Además, íconos de 16 a 512 px e imagen para compartir en redes.</p>')}
-      {block('Logotipo', '<p>RILÁN se compuso en Marcellus con espaciado amplio. Las letras se convirtieron en trazos para que el logo no dependa de tener la fuente instalada.</p>')}
+      {block('Variantes', '<p>Isotipo, logotipo RILÁN, versión vertical (como en las destacadas) y horizontal, cada una en claro y oscuro. Además, el ícono de la pestaña del navegador y la imagen que aparece al compartir el enlace.</p>')}
+      {block('Logotipo', '<p>RILÁN se compuso en Marcellus con espaciado amplio. Quedó dibujado como imagen, para que se vea idéntico en cualquier pantalla o impresión.</p>')}
       {block('Dónde aparece', '<p>Se dibuja en la pantalla de carga, encabeza cada capítulo como en sus destacadas y es la "ventana" del video de bienvenida.</p>')}
     </div>''', left_cls='full'))
 
@@ -332,8 +332,8 @@ S('Precarga', 'La espera como umbral',
   'd-loader', None, [
       block('Qué se ve', '<p>La Λ se traza y luego se rellena. Debajo, el avance va de 00 a 100 % en la misma letra de las coordenadas. Al llegar a 100, el número se desvanece, aparecen <span class="tl">' + COORDS + '</span> y se levanta la cortina.</p>'),
       block('Por qué', '<p>Un sitio hecho de fotos y video se rompe si carga a saltos. Esta espera breve asegura que todo lo que se ve primero ya esté listo, y la convierte en un momento de marca.</p>'),
-      block('Tiempos', '<p>Mínimo 1,8 s, para que se sienta, aunque la conexión sea rápida. Máximo 8 s hasta ver la portada, aunque la red sea lenta. El resto del sitio se descarga en segundo plano mientras se mira la portada.</p>'),
-      block('Color y letra', chips([('Noche', '#121311'), ('Niebla', '#EAE9E3')]) + '<p>Marcellus, 0,72 rem, espaciado 0,28 em.</p>'),
+      block('Tiempos', '<p>Dura casi dos segundos aunque la conexión sea rápida, para que se sienta. Y nunca más de ocho hasta ver la portada, aunque la conexión sea lenta. El resto del sitio se descarga en segundo plano mientras se mira la portada.</p>'),
+      block('Color y letra', chips([('Noche', '#121311'), ('Niebla', '#EAE9E3')]) + '<p>Marcellus pequeña y espaciada, la misma letra de las coordenadas.</p>'),
   ], nota='Captura tomada mientras el porcentaje avanza.')
 
 S('Portada', 'La noche, el hotel encendido',
@@ -341,8 +341,8 @@ S('Portada', 'La noche, el hotel encendido',
   'd-hero', 'm-hero', [
       block('Textos', quote('Bienvenidos al misticismo del archipiélago.', IG['03']) + quote('A secluded hotel on the Rilán Peninsula. Within a UNESCO World Heritage landscape.', 'Bio de Instagram · en su idioma original')),
       block('Imagen', thumbs([('web_rilan_35', 'web_rilan_35 · ' + GAL)]) + '<p>Se ancló al borde inferior para que el título quede sobre el cielo y nunca tape las ventanas encendidas.</p>'),
-      block('Letra', '<p>RILÁN en Marcellus a hasta 15 rem, con espaciado de 0,14 em: es el logotipo, a escala de paisaje. La frase va en Newsreader itálica liviana.</p>'),
-      block('Movimiento', '<p>Las letras suben una a una desde una máscara y la foto se asienta desde un leve zoom. Al bajar, el nombre se separa y se desvanece.</p>'),
+      block('Letra', '<p>RILÁN en Marcellus, enorme y con letras espaciadas: es el logotipo, a escala de paisaje. La frase va en Newsreader itálica liviana.</p>'),
+      block('Movimiento', '<p>Las letras suben una a una, como si salieran de detrás de una línea, y la foto se asienta desde un leve zoom. Al bajar, el nombre se separa y se desvanece.</p>'),
       block('Por qué primero', '<p>Responde en un segundo dónde y qué es. La noche estrellada anticipa el silencio y el aislamiento que valoran los huéspedes.</p>', 'wide'),
   ])
 
@@ -350,17 +350,17 @@ S('Ventana Λ', 'El isotipo se abre',
   'Es el momento memorable del sitio. El isotipo se convierte en una ventana con forma de A, como las casas de RILÁN, que deja ver el reel de bienvenida. Al bajar, crece hasta llenar la pantalla.',
   'd-portal-a', None, [
       block('Textos', quote('Al sur del mundo, una isla donde el tiempo sigue un ritmo propio.', IG['02']) + quote('La madera, el fuego, el patrimonio, el silencio.', IG['02']) + '<p>Las cuatro palabras aparecen una a una cuando el video ya ocupa toda la pantalla.</p>'),
-      block('Video', thumbs([('ig_2026-09-01_DcwvNlMxpss_portada', 'Reel de bienvenida · Instagram, 1 sep 2026')]) + '<p>Es el mismo reel de Instagram (54 s). Se comprimió de 6,5 a 3 MB y se precarga en la pantalla de carga para que no se corte.</p>'),
-      block('Composición', '<p>El fondo es niebla y el texto va a la izquierda. La ventana triangular está centrada y lleva el punto del isotipo en su base. Lo sigue el scroll, sin botones.</p>'),
+      block('Video', thumbs([('ig_2026-09-01_DcwvNlMxpss_portada', 'Reel de bienvenida · Instagram, 1 sep 2026')]) + '<p>Es el mismo reel de Instagram (54 s). Se aligeró a la mitad de su peso, sin pérdida visible, y se descarga durante la espera inicial para que nunca se corte.</p>'),
+      block('Composición', '<p>El fondo es niebla y el texto va a la izquierda. La ventana triangular está centrada y lleva el punto del isotipo en su base. Se abre al bajar por la página, sin botones.</p>'),
       block('Por qué aquí', '<p>Después de la noche, la marca "abre la puerta": se entra literalmente por el isotipo.</p>'),
   ], desk2='d-portal-b', nota='Arriba, la ventana cerrada. Abajo, abierta, con las cuatro palabras.')
 
 S('Bienvenida', 'Bienvenidos a RILÁN',
   'Una pausa clara y centrada después del video, con mucho aire. Es la primera vez que el texto respira solo.',
   'd-welcome', 'm-welcome', [
-      block('Textos', quote('Aquí, el misticismo del archipiélago se revela lentamente, moldeado por la tierra, el mar y siglos de tradición.', IG['02']) + quote('Bienvenidos a RILÁN', IG['02']) + '<p class="small">Se corrigió la concordancia del original ("se revelan", "moldeados") y quedó registrado.</p>'),
-      block('Letra y color', chips([('Niebla', '#EAE9E3'), ('Piedra', '#544F4C')]) + '<p>El párrafo va en Newsreader 300 a 2,7 rem y el título, en Marcellus en mayúsculas. Solo un pequeño Λ como ornamento.</p>'),
-      block('Movimiento', '<p>Las líneas suben desde una máscara, una tras otra, con arranque rápido y frenado suave.</p>'),
+      block('Textos', quote('Aquí, el misticismo del archipiélago se revela lentamente, moldeado por la tierra, el mar y siglos de tradición.', IG['02']) + quote('Bienvenidos a RILÁN', IG['02']) + '<p class="small">Se corrigió la concordancia del original ("se revelan", "moldeados").</p>'),
+      block('Letra y color', chips([('Niebla', '#EAE9E3'), ('Piedra', '#544F4C')]) + '<p>El párrafo va en Newsreader liviana y grande, y el título, en Marcellus en mayúsculas. Solo un pequeño Λ como ornamento.</p>'),
+      block('Movimiento', '<p>Las líneas aparecen una tras otra, subiendo desde abajo, con arranque rápido y frenado suave.</p>'),
       block('Por qué aquí', '<p>Cierra el prólogo con el mismo saludo con que termina el texto del reel, y abre paso a los capítulos.</p>'),
   ])
 
@@ -369,7 +369,7 @@ S('Territory', 'Chilwe es territorio antes que destino',
   'd-territory', 'm-chapter', [
       block('Textos', quote('Chilwe es territorio antes que destino. Una geografía marcada por su bordemar, por el bosque, por el agua y por las personas…', IG['06'])),
       block('Imágenes', thumbs([('ig_2026-09-23_DdoqxbhxKbG', 'Helechos · ' + IG['15']), ('ig_2026-09-05_Dc41N1BRYMT', 'Musgo · ' + IG['06']), ('ig-destacada_TERRITORY_01', 'Destacada TERRITORY')])),
-      block('Composición', '<p>La portada tiene la misma gramática que la destacada, pero a pantalla completa. Al pasar, la palabra "respira": su espaciado se cierra desde 0,5 hasta 0,12 em. La sección clara es asimétrica: título grande a la izquierda y foto vertical a la derecha.</p>'),
+      block('Composición', '<p>La portada tiene la misma gramática que la destacada, pero a pantalla completa. Al pasar, la palabra "respira": sus letras, muy separadas al principio, se van juntando. La sección clara es asimétrica: título grande a la izquierda y foto vertical a la derecha.</p>'),
       block('Color', chips([('Helecho', '#113A1F'), ('Niebla', '#EAE9E3')]) + '<p>El verde viene de la propia foto.</p>'),
   ], desk2='d-chapter')
 
@@ -379,7 +379,7 @@ S('Senderos', 'Perderse también es retornar',
       block('Textos', quote('Perderse en los senderos de RILÁN es otra forma de entrar en el bosque. […] Aquí, perderse también es una forma de retornar.', IG['13']) + quote('El bosque guarda su propio ritmo.', IG['15'])),
       block('Imágenes', thumbs([('ig_2026-09-17_DdZd85rRxkm', 'Sendero · ' + IG['13']), ('web_rilan_47', 'Vista aérea · galería'), ('web_rilan_03', 'Iglesia entre árboles · galería'), ('ig_2026-09-13_DdOtAZ-xADQ', 'Pilotes · ' + IG['11'])])),
       block('Composición', '<p>Fotos de tres formatos (vertical, panorámica y media) a distintas alturas, como pasos irregulares. Cada foto entra con una cortina lateral y se desplaza levemente dentro de su marco.</p>'),
-      block('Técnica', '<p>Se construyó para que la página no "salte" al entrar ni al salir de la galería. Fue una de las correcciones de la auditoría.</p>'),
+      block('Sin tropiezos', '<p>Está construida para que la página no dé saltos al entrar ni al salir de la galería: el paso de vertical a horizontal se siente continuo.</p>'),
   ], nota='En celular es un carrusel horizontal con deslizamiento.')
 
 S('Mysticism', 'El silencio aquí tiene capas',
@@ -422,7 +422,7 @@ S('Fuego', 'Un refugio para otro ritmo',
   'Una pausa a pantalla completa: la sala con la estufa encendida y la frase que mejor resume la estadía.',
   'd-fire', 'm-fire', [
       block('Textos', quote('RILÁN es un refugio para otro ritmo. Fuego, silencio y paisaje construyen la estadía, hasta generar esa extraña sensación de estar lejos y, al mismo tiempo, haber vuelto a casa.', IG['16'])),
-      block('Imagen', thumbs([('web_rilan_51', 'Sala con estufa · galería')]) + '<p>Lleva un velo oscuro al 50 % para que el texto se lea sin perder el fuego.</p>'),
+      block('Imagen', thumbs([('web_rilan_51', 'Sala con estufa · galería')]) + '<p>Lleva un velo oscuro para que el texto se lea sin perder el fuego.</p>'),
       block('Letra', '<p>El título va en Marcellus en mayúsculas y la segunda frase, en Newsreader itálica, como una voz más baja.</p>'),
       block('Por qué aquí', '<p>Cierra Refuge con la idea de "haber vuelto a casa", la misma que repiten los huéspedes en Booking.</p>'),
   ])
@@ -477,7 +477,7 @@ S('Mónica y Rodrigo', 'Lo que dicen sus huéspedes',
       block('Citas', quote('Una de las mayores joyas de este hotel son sus dueños, Mónica y Rodrigo.', 'Velasquez · Chile') + quote('Un écrin de sérénité et de confort', 'Patrice · Francia') + quote('Das Hotel ist architektonisch ein Highlight.', 'Beatrice · Suiza') + quote('It was the most peaceful hotel stay we have ever experienced.', 'Cezanne · Estados Unidos')),
       block('Dato', '<p><b>9,5 · Excepcional · 99 comentarios</b>, tal como lo muestra Booking.com.</p>'),
       block('Por qué así', '<p>Español, inglés, francés y alemán, sin traducir: así se ve quién llega a RILÁN. Las citas se acortaron solo con […], sin cambiar palabras.</p>'),
-      block('Interacción', '<p>Avanza solo cada 6,5 s y se detiene al pasar el cursor. Se puede arrastrar y tiene contador y flechas.</p>'),
+      block('Interacción', '<p>Avanza solo cada pocos segundos y se detiene al pasar el cursor. Se puede arrastrar y tiene contador y flechas.</p>'),
   ])
 
 S('Cómo llegar', 'El punto exacto del hotel',
@@ -507,12 +507,12 @@ L.append(lamina_libre(n,
     f'''<p class="kick">Detalles en todo el sitio</p>
     <h2>Lo que no se ve, pero se siente</h2>
     <div class="grid">
-      {block('Menú', '<p>Los capítulos se muestran en grande y al pasar sobre cada uno aparece su foto. Se cierra con Esc y la navegación con teclado queda dentro del menú mientras está abierto.</p>')}
-      {block('Dos idiomas', '<p>Selector ES / EN. Se traduce la interfaz (menús, botones, datos y descripciones de imágenes), y lo publicado en un solo idioma se muestra como fue escrito.</p>')}
+      {block('Menú', '<p>Los capítulos se muestran en grande y al pasar sobre cada uno aparece su foto. Se cierra con la tecla Esc o con la X.</p>')}
+      {block('Dos idiomas', '<p>Un selector ES / EN. Se traduce todo lo que guía la visita (menús, botones, datos y descripciones de imágenes), y lo publicado en un solo idioma se muestra como fue escrito.</p>')}
       {block('Movimiento con calma', '<p>Todo arranca rápido y frena suave. Quien tenga activada la opción de "reducir movimiento" en su equipo ve el sitio completo y quieto.</p>')}
       {block('Celular primero', '<p>Cada sección tiene su versión para teléfono: galerías que se deslizan con el dedo, textos a una columna y el mapa con dos dedos.</p>')}
-      {block('Sin saltos', '<p>La página no "brinca" mientras carga ni al bajar. Se midió en cuatro tamaños de pantalla y quedó prácticamente en cero.</p>')}
-      {block('Accesible', '<p>Contraste verificado, foco visible al navegar con teclado y descripciones de todas las imágenes en ambos idiomas.</p>')}
+      {block('Sin saltos', '<p>La página no "brinca" mientras carga ni al bajar. Se revisó en cuatro tamaños de pantalla, del celular a un monitor grande.</p>')}
+      {block('Accesible', '<p>Textos que se leen bien, recorrido completo con el teclado y todas las imágenes descritas en ambos idiomas, para quienes usan lectores de pantalla.</p>')}
     </div>'''))
 
 # Cierre
@@ -530,8 +530,11 @@ L.append(lamina_libre(n,
         <li>Dominio propio .cl y alojamiento a nombre de RILÁN</li>
         <li>Reservas directas y la coordinación diaria de las cenas, más simples</li>
       </ul>
-      <p class="link">hotelrilan.vercel.app</p>
-      <p class="sign">Pablo Figueroa · pabloignaciofigueroa@gmail.com</p>
+      <p class="invite">Cuando quieran, lo conversamos.</p>
+      <p class="who">Pablo Figueroa G.</p>
+      <p class="role">Director de estudio</p>
+      <p class="contact"><a href="mailto:pablo@bergerac.cl">pablo@bergerac.cl</a> · <a href="tel:+56975892096">+56 9 7589 2096</a></p>
+      <p class="link"><a href="https://bergerac.cl">Bergerac.cl</a></p>
       <p class="coords">{COORDS}</p>
     </div>''', left_cls='full'))
 
@@ -635,8 +638,12 @@ h2{{font-family:"Marcellus";font-weight:400;font-size:21pt;line-height:1.12;lett
 .close .mk{{margin-bottom:.14in}}
 .next{{list-style:none;margin:.04in 0 .2in}}
 .next li{{font-size:11pt;font-weight:300;line-height:1.5;padding:5pt 0;border-bottom:.5pt solid var(--bruma)}}
-.close .link{{font-family:"Marcellus";font-size:9pt;letter-spacing:.24em;text-transform:uppercase;color:var(--fuego)}}
-.close .sign{{font-size:10pt}}
+.close a{{color:inherit;text-decoration:none}}
+.close .invite{{font-size:13pt;font-style:italic;font-weight:300;margin-bottom:.06in}}
+.close .who{{font-family:"Marcellus";font-size:9pt;letter-spacing:.24em;text-transform:uppercase;color:var(--piedra)}}
+.close .role{{font-size:9.4pt;margin-top:-4pt}}
+.close .contact{{font-size:8.6pt;color:var(--ceniza)}}
+.close .link{{font-family:"Marcellus";font-size:13pt;letter-spacing:.24em;text-transform:uppercase;color:var(--fuego);margin-top:.12in}}
 .close .coords{{margin-top:.14in}}
 '''
 
