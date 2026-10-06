@@ -15,7 +15,7 @@
     resizeT = setTimeout(() => { resizing = false; resizeFromY = null; stableY = window.scrollY; }, 1200);
   });
   let finishIntro = () => { const l = document.querySelector('.loader'); if (l) l.remove(); };
-  const loaderSafety = setTimeout(() => finishIntro(), 7000);
+  const loaderSafety = setTimeout(() => finishIntro(), 12000);
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const desktop = window.matchMedia('(min-width: 900px)');
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -25,6 +25,11 @@
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* sin almacenamiento */ } }
   };
+
+  /* ---------- carga crítica: la inicia el script en línea del HTML (window.__rilan) ---------- */
+  const conn = navigator.connection || {};
+  const lowData = !!conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
+  const critical = window.__rilan || { done: Promise.resolve(), reached: Promise.resolve(), video: null };
 
   /* ---------- idioma ---------- */
   const swapAttr = (attr, key) => {
@@ -131,7 +136,10 @@
     const sc = document.createElement('script');
     sc.src = 'vendor/leaflet.js';
     sc.onload = initMap;
-    sc.onerror = () => { mapEl.remove(); }; /* queda la foto aérea de respaldo */
+    sc.onerror = () => { /* sin mapa: queda el fondo claro con un acceso a Google Maps */
+      mapEl.classList.add('is-failed');
+      mapEl.innerHTML = '<a class="u-link t-label" href="https://www.google.com/maps/search/?api=1&query=-42.5486,-73.7211" target="_blank" rel="noopener"><span data-l="es">Ver ubicación en Google Maps</span><span data-l="en">See location in Google Maps</span></a>';
+    };
     document.head.appendChild(sc);
   };
   if (mapEl && 'IntersectionObserver' in window) {
@@ -171,7 +179,18 @@
     po.observe(listenVideo);
   } else if (listenVideo && listenVideo.dataset.poster) listenVideo.poster = listenVideo.dataset.poster;
   playInView(listenVideo, () => { if (!listenVideo.muted) setSound(false); });
-  playInView($('[data-portal-video]'));
+  const portalVideo = $('[data-portal-video]');
+  const useBlob = () => {
+    const job = critical.video;
+    if (!job || !job.objectURL || !portalVideo || portalVideo.dataset.blob) return;
+    if (!portalVideo.paused && portalVideo.currentTime > 0) return; /* ya se está viendo: no se interrumpe */
+    portalVideo.dataset.blob = '1';
+    $$('source', portalVideo).forEach(src => src.remove());
+    portalVideo.src = job.objectURL;
+    portalVideo.load();
+  };
+  critical.done.then(() => { useBlob(); setTimeout(useBlob, 4000); setTimeout(useBlob, 12000); });
+  playInView(portalVideo);
 
   /* ---------- menú ---------- */
   const menu = $('[data-menu]');
@@ -408,30 +427,37 @@
 
   /* ---------- precarga + entrada del hero ---------- */
   const loader = $('.loader');
-  const heroImg = $('.hero__media img');
-  const imgReady = new Promise(res => {
-    if (!heroImg || heroImg.complete) return res();
-    heroImg.addEventListener('load', res, { once: true });
-    heroImg.addEventListener('error', res, { once: true });
-    setTimeout(res, 2600);
-  });
   const fontsReady = document.fonts
     ? Promise.race([
         Promise.allSettled(['400 1em Marcellus', '300 1em Newsreader', 'italic 300 1em Newsreader', '400 1em Newsreader', 'italic 400 1em Newsreader'].map(f => document.fonts.load(f))),
-        new Promise(r => setTimeout(r, 2500))
-      ]).then(() => document.fonts.ready).catch(() => {})
+        new Promise(r => setTimeout(r, 1500))
+      ]).catch(() => {})
     : Promise.resolve();
 
   gsap.set('.hero__letters span', { yPercent: 105 });
   gsap.set('[data-hero-fade]', { opacity: 0 });
-  const markPath = $('.loader__mark path');
-  const len = markPath.getTotalLength();
-  gsap.set(markPath, { strokeDasharray: len, strokeDashoffset: len });
+  /* la Λ se dibuja con CSS desde el primer instante; aquí solo se espera a que termine */
   const intro = gsap.timeline();
-  intro.to(markPath, { strokeDashoffset: 0, duration: .95, ease: 'power2.inOut' })
-       .to('.loader__mark', { fill: '#EAE9E3', duration: .5, ease: 'power1.out' }, '-=.25')
-       .to('.loader__mark rect', { opacity: 1, duration: .3 }, '<')
-       .fromTo('.loader__coords', { opacity: 0, letterSpacing: '.6em' }, { opacity: .8, letterSpacing: '.28em', duration: .9 }, '-=.7');
+  intro.to({}, { duration: Math.max(0, 1.25 - performance.now() / 1000) });
+
+
+  /* resto del sitio: en orden de aparición, 3 a la vez, el menú al final */
+  const prefetchRest = () => {
+    if (lowData) return;
+    const imgs = $$('img[loading="lazy"]');
+    imgs.sort((a, b) => (a.closest('[data-menu]') ? 1 : 0) - (b.closest('[data-menu]') ? 1 : 0));
+    const next = () => {
+      const img = imgs.shift();
+      if (!img) return;
+      if (img.complete && img.naturalWidth) return next();
+      const go = () => next();
+      img.addEventListener('load', go, { once: true });
+      img.addEventListener('error', go, { once: true });
+      img.loading = 'eager';
+    };
+    const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 200));
+    idle(() => { next(); next(); next(); });
+  };
 
   let introDone = false;
   finishIntro = () => {
@@ -439,14 +465,22 @@
     introDone = true;
     clearTimeout(loaderSafety);
     try { buildReveals(); } catch (e) { /* el contenido sigue visible aunque falle la división */ }
-    const tl = gsap.timeline({ onComplete: () => { loader && loader.remove(); lenis && lenis.start(); } });
+    const tl = gsap.timeline({ onComplete: () => { loader && loader.remove(); lenis && lenis.start(); prefetchRest(); } });
     tl.to(loader, { clipPath: 'inset(0 0 100% 0)', duration: 1.1, ease: 'power3.inOut' })
+      .call(() => { if (loader) loader.style.pointerEvents = 'none'; lenis && lenis.start(); }, null, 1.05)
       .fromTo('[data-hero-media] img', { scale: 1.18 }, { scale: 1, duration: 2.2, ease: 'expo.out' }, '-=.75')
       .to('.hero__letters span', { yPercent: 0, duration: 1.3, stagger: .07, ease: 'expo.out' }, '-=1.9')
       .to('[data-hero-fade]', { opacity: 1, duration: 1.2, stagger: .1, ease: 'power2.out' }, '-=1');
     ScrollTrigger.refresh();
   };
-  Promise.all([imgReady, fontsReady, new Promise(r => intro.eventCallback('onComplete', r))]).then(() => finishIntro(), () => finishIntro());
+  Promise.all([critical.reached, fontsReady, new Promise(r => intro.eventCallback('onComplete', r))]).then(() => {
+    /* al llegar a 100: el porcentaje se va, aparecen las coordenadas y se abre la portada */
+    gsap.set('.loader__pct', { animation: 'none', opacity: .85 }); /* GSAP toma el control de la animación CSS */
+    gsap.timeline({ onComplete: () => finishIntro() })
+      .to('.loader__pct', { opacity: 0, y: -8, duration: .4, ease: 'power2.in' })
+      .fromTo('.loader__coords', { opacity: 0, letterSpacing: '.6em' }, { opacity: .85, letterSpacing: '.28em', duration: .8, ease: 'expo.out' }, '-=.05')
+      .to({}, { duration: .25 });
+  }, () => finishIntro());
 
   /* hero: al salir, la imagen se hunde y el título se separa */
   gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })

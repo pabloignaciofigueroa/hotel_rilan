@@ -41,6 +41,33 @@ def repl(m):
 
 
 out = re.sub(r'<x-img\s+([^>]*?)\s*/?>', repl, SRC)
+
+# Carga crítica: lo que la precarga espera (con su peso real) antes de entrar.
+# frac = fracción del ancho de pantalla que ocupa la imagen (para elegir la variante s/l).
+def size(rel):
+    return (ROOT / rel).stat().st_size
+CRITICAL_IMGS = [
+    ('web_rilan_35', 1.0),                 # portada
+    ('ig_2026-09-23_DdoqxbhxKbG', 1.0),    # Territory
+    ('ig_2026-09-05_Dc41N1BRYMT', 0.42),   # Chilwe es territorio
+    ('ig_2026-09-17_DdZd85rRxkm', 0.36),   # galería: sendero
+    ('web_rilan_47', 0.52),                # galería: vista aérea
+    ('ig_2026-09-02_DczRbckRl74', 1.0),    # Mysticism
+    ('ig_2026-09-11_DdJ6xS-xtDC', 1.0),    # Refuge
+    ('ig_2026-09-03_Dc00-W6RwgS', 1.0),    # Heritage
+]
+crit = {
+    'fonts': [{'url': f'assets/fonts/{f}.woff2', 'bytes': size(f'assets/fonts/{f}.woff2')} for f in
+              ['marcellus-latin-400-normal', 'newsreader-latin-300-normal', 'newsreader-latin-300-italic',
+               'newsreader-latin-400-normal', 'newsreader-latin-400-italic']],
+    'imgs': [{'frac': fr,
+              's': {'url': f'assets/img/{i}-s.webp', 'bytes': size(f'assets/img/{i}-s.webp')},
+              'l': {'url': f'assets/img/{i}-l.webp', 'bytes': size(f'assets/img/{i}-l.webp')}} for i, fr in CRITICAL_IMGS],
+    'video': {'webm': {'url': 'assets/video/bienvenida.webm', 'bytes': size('assets/video/bienvenida.webm')},
+              'mp4': {'url': 'assets/video/bienvenida.mp4', 'bytes': size('assets/video/bienvenida.mp4')},
+              'poster': {'url': 'assets/video/bienvenida-poster.jpg', 'bytes': size('assets/video/bienvenida-poster.jpg')}},
+}
+out = out.replace('<!--CRITICAL-->', '<script type="application/json" id="critical">' + json.dumps(crit, separators=(',', ':')) + '</script>')
 (ROOT / 'index.html').write_text(out)
 missing = re.findall(r'<x-img', out)
 print('index.html listo', len(out) // 1024, 'KB', 'pendientes:', len(missing))

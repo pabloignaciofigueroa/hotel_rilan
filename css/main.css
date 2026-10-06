@@ -103,8 +103,18 @@ html[data-lang="es"] [data-l="en"], html[data-lang="en"] [data-l="es"] { display
 /* ---------- precarga ---------- */
 .loader { position: fixed; inset: 0; z-index: 90; background: var(--noche); color: var(--niebla); display: grid; place-items: center; align-content: center; gap: 34px; }
 .loader__mark { width: 54px; fill: transparent; stroke: var(--niebla); stroke-width: 6; }
-.loader__mark rect { fill: var(--niebla); stroke: none; opacity: 0; }
+.loader__mark rect { fill: var(--niebla); stroke: none; opacity: 0; animation: loader-fade .3s ease-out .85s forwards; }
+.loader__mark path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: loader-draw .95s cubic-bezier(.65,0,.35,1) forwards, loader-fill .5s ease-out .7s forwards; }
+@keyframes loader-draw { to { stroke-dashoffset: 0; } }
+@keyframes loader-fill { to { fill: var(--niebla); } }
+@keyframes loader-fade { to { opacity: 1; } }
+@keyframes loader-pct { to { opacity: .85; } }
+.loader__meta { display: grid; justify-items: center; }
+.loader__meta > * { grid-area: 1 / 1; }
 .loader__coords { opacity: 0; }
+.loader__pct { opacity: 0; animation: loader-pct .5s ease-out .2s forwards; display: inline-flex; align-items: baseline; gap: .35em; font-variant-numeric: tabular-nums; }
+.loader__pct [data-pct] { display: inline-block; min-width: 3ch; text-align: right; }
+.loader__sym { opacity: .6; }
 html:not(.js) .loader { display: none; }
 
 /* ---------- navegación ---------- */
@@ -366,10 +376,10 @@ html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .62; }
 
 /* ---------- cómo llegar ---------- */
 .arrive { background: var(--noche); display: grid; grid-template-columns: 1.15fr 1fr; min-height: 100svh; }
-.arrive__map { position: relative; overflow: hidden; background: var(--bosque); }
-.arrive__fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(.6) brightness(.7); }
+.arrive__map { position: relative; overflow: hidden; background: var(--niebla); }
 .arrive__leaflet { position: absolute; inset: 0; z-index: 1; background: transparent; font-family: var(--f-display); }
 .arrive__leaflet .leaflet-tile-pane { filter: grayscale(1) contrast(.95) brightness(.85); }
+.arrive__leaflet.is-failed { display: grid; place-items: center; color: var(--piedra); }
 .arrive__leaflet.leaflet-container { background: transparent; outline-offset: -6px; }
 /* marcador: el cuadrado pulsante va anclado a las coordenadas del hotel */
 .rilan-pin { position: relative; }
