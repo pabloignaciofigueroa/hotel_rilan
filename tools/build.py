@@ -9,6 +9,7 @@ import json, re, pathlib, html
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 META = json.loads((ROOT / 'assets/img/meta.json').read_text())
 SRC = (ROOT / 'src/index.html').read_text()
+ALT_EN = json.loads((ROOT / 'tools/alt-en.json').read_text())
 
 
 def attrs(s):
@@ -26,6 +27,10 @@ def repl(m):
     sizes = a.get('sizes', '100vw')
     alt = a.get('alt', '')
     extra = a.get('data', '')
+    if alt and i in ALT_EN:
+        extra += f' data-alt-en="{html.escape(ALT_EN[i])}"'
+    elif alt:
+        raise SystemExit(f'Falta alt en inglés para {i} (tools/alt-en.json)')
     return (
         f'<img class="{cls}" src="assets/img/{i}-l.webp" '
         f'srcset="assets/img/{i}-s.webp 800w, assets/img/{i}-l.webp 1800w" sizes="{sizes}" '

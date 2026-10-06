@@ -6,6 +6,7 @@
   'use strict';
 
   const root = document.documentElement;
+  const loaderSafety = setTimeout(() => { const l = document.querySelector('.loader'); if (l) l.remove(); }, 7000);
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const desktop = window.matchMedia('(min-width: 900px)');
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -17,10 +18,20 @@
   };
 
   /* ---------- idioma ---------- */
+  const swapAttr = (attr, key) => {
+    $$(`[data-${key}-en]`).forEach(el => {
+      if (el.dataset[key + 'Es'] === undefined) el.dataset[key + 'Es'] = el.getAttribute(attr) || '';
+      el.setAttribute(attr, root.dataset.lang === 'en' ? el.dataset[key + 'En'] : el.dataset[key + 'Es']);
+    });
+  };
   const setLang = (l) => {
     root.dataset.lang = l;
     root.lang = l;
     store.set('rilan-lang', l);
+    swapAttr('alt', 'alt');
+    swapAttr('aria-label', 'aria');
+    swapAttr('title', 'title');
+    swapAttr('content', 'meta');
     $$('[data-on]').forEach(el => {
       const btn = el.closest('[data-sound]');
       el.textContent = btn && btn.getAttribute('aria-pressed') === 'true' ? el.dataset.on : el.dataset.off;
@@ -134,6 +145,9 @@
 
   /* ---------- sliders (Swiper) ---------- */
   const pad = (n) => String(n).padStart(2, '0');
+  const a11yMsgs = () => root.dataset.lang === 'en'
+    ? { prevSlideMessage: 'Previous', nextSlideMessage: 'Next', firstSlideMessage: 'First slide', lastSlideMessage: 'Last slide', slideLabelMessage: '{{index}} / {{slidesLength}}' }
+    : { prevSlideMessage: 'Anterior', nextSlideMessage: 'Siguiente', firstSlideMessage: 'Primera imagen', lastSlideMessage: 'Última imagen', slideLabelMessage: '{{index}} / {{slidesLength}}' };
   const makeSlider = (el, opts, prefix) => {
     if (!el || !window.Swiper) return null;
     const total = el.querySelectorAll('.swiper-slide').length;
@@ -143,7 +157,7 @@
     const sw = new Swiper(el, Object.assign({
       slidesPerView: 'auto', spaceBetween: 16, speed: 900, grabCursor: true,
       keyboard: { enabled: true, onlyInViewport: true },
-      a11y: { enabled: true },
+      a11y: Object.assign({ enabled: true }, a11yMsgs()),
       navigation: { prevEl: $(`[data-${prefix}-prev]`, el), nextEl: $(`[data-${prefix}-next]`, el) },
       on: {
         slideChange(s) {
@@ -167,15 +181,29 @@
     sc.src = 'vendor/swiper-bundle.min.js'; sc.onload = res; sc.onerror = rej;
     document.head.appendChild(sc);
   }));
+  const sliders = [];
   const lazySlider = (el, opts, prefix) => {
     if (!el) return;
-    const init = () => loadSwiper().then(() => makeSlider(el, opts, prefix)).catch(() => {});
+    const init = () => {
+      if (el.swiper || el.dataset.pending) return;
+      if (!el.offsetParent) return; /* oculto por idioma: se inicia al cambiar */
+      el.dataset.pending = '1';
+      loadSwiper().then(() => { const sw = makeSlider(el, opts, prefix); if (sw) sliders.push(sw); }).catch(() => {}).finally(() => { delete el.dataset.pending; });
+    };
+    el._initSlider = init;
     if (!('IntersectionObserver' in window)) return init();
     const io = new IntersectionObserver((en) => { if (en[0].isIntersecting) { io.disconnect(); init(); } }, { rootMargin: '900px 0px' });
     io.observe(el);
   };
   lazySlider($('[data-rooms]'), { spaceBetween: 18 }, 'rooms');
-  lazySlider($('[data-reviews]'), { spaceBetween: 0, autoplay: reduced ? false : { delay: 6500, disableOnInteraction: true, pauseOnMouseEnter: true } }, 'reviews');
+  $$('[data-reviews]').forEach(el => lazySlider(el, { spaceBetween: 0, autoplay: reduced ? false : { delay: 6500, disableOnInteraction: true, pauseOnMouseEnter: true } }, 'reviews'));
+  document.addEventListener('rilan:lang', () => {
+    $$('[data-rooms], [data-reviews]').forEach(el => {
+      if (!el.offsetParent) return;
+      if (el.swiper) { Object.assign(el.swiper.params.a11y, a11yMsgs()); el.swiper.update(); }
+      else if (el._initSlider && el.getBoundingClientRect().top < window.innerHeight * 3) el._initSlider();
+    });
+  });
 
   /* ---------- etiqueta "Arrastrar" que sigue al cursor ---------- */
   const drag = $('[data-drag]');
@@ -221,6 +249,8 @@
   /* ---------- sin movimiento: mostrar todo y salir ---------- */
   if (reduced || !window.gsap || !window.ScrollTrigger) {
     $('.loader')?.remove();
+    clearTimeout(loaderSafety);
+    $$('[data-clip]').forEach(f => f.classList.add('is-in'));
     $('[data-portal-window]')?.style.setProperty('clip-path', 'none');
     navTheme();
     return;
@@ -253,17 +283,19 @@
         if (top === null || Math.abs(y - top) > 4) { lines.push([]); top = y; }
         lines[lines.length - 1].push(w.textContent);
       });
-      t.innerHTML = lines.map(l => `<span class="line"><span>${l.join(' ')}</span></span>`).join('');
+      const esc = (x) => x.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+      t.innerHTML = lines.map(l => `<span class="line"><span>${esc(l.join(' '))}</span></span>`).join('');
     });
   };
   const revealTweens = [];
-  const buildReveals = () => {
+  const buildReveals = (rebuild = false) => {
     revealTweens.forEach(t => { t.scrollTrigger && t.scrollTrigger.kill(); t.kill(); });
     revealTweens.length = 0;
     $$('[data-lines]').forEach(el => {
       splitLines(el);
       const inner = $$('.line > span', el).filter(s => s.offsetParent);
       if (!inner.length) return;
+      if (rebuild && el.getBoundingClientRect().top < window.innerHeight * .88) return; /* ya visto: queda quieto */
       const tw = gsap.fromTo(inner, { yPercent: 105 }, {
         yPercent: 0, duration: 1.1, stagger: .07, ease: 'expo.out',
         scrollTrigger: { trigger: el, start: 'top 88%', once: true }
@@ -281,7 +313,12 @@
     heroImg.addEventListener('error', res, { once: true });
     setTimeout(res, 2600);
   });
-  const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+  const fontsReady = document.fonts
+    ? Promise.race([
+        Promise.all(['400 1em Marcellus', '300 1em Newsreader', 'italic 300 1em Newsreader', '400 1em Newsreader', 'italic 400 1em Newsreader', '500 1em Newsreader'].map(f => document.fonts.load(f))),
+        new Promise(r => setTimeout(r, 2500))
+      ]).then(() => document.fonts.ready)
+    : Promise.resolve();
 
   gsap.set('.hero__letters span', { yPercent: 105 });
   gsap.set('[data-hero-fade]', { opacity: 0 });
@@ -296,6 +333,7 @@
 
   Promise.all([imgReady, fontsReady, new Promise(r => intro.eventCallback('onComplete', r))]).then(() => {
     buildReveals();
+    clearTimeout(loaderSafety);
     const tl = gsap.timeline({ onComplete: () => { loader.remove(); lenis && lenis.start(); } });
     tl.to(loader, { clipPath: 'inset(0 0 100% 0)', duration: 1.1, ease: 'power3.inOut' })
       .fromTo('[data-hero-media] img', { scale: 1.18 }, { scale: 1, duration: 2.2, ease: 'expo.out' }, '-=.75')
@@ -316,14 +354,18 @@
     const mm = gsap.matchMedia();
     mm.add({ d: '(min-width: 900px)', m: '(max-width: 899px)' }, (ctx) => {
       const start = ctx.conditions.d ? 'polygon(50% 26%, 50% 26%, 63% 76%, 37% 76%)' : 'polygon(50% 30%, 50% 30%, 68% 72%, 32% 72%)';
-      const tl = gsap.timeline({ scrollTrigger: { trigger: portal, start: 'top top', end: 'bottom bottom', scrub: .6 } });
+      const navEl = $('[data-nav]');
+      const tl = gsap.timeline({ scrollTrigger: { trigger: portal, start: 'top top', end: 'bottom bottom', scrub: .6,
+        /* mientras domina el fondo claro, el menú va oscuro */
+        onUpdate: (self) => navEl.classList.toggle('on-light', self.progress < .42),
+        onLeave: () => navEl.classList.remove('on-light'),
+        onLeaveBack: () => navEl.classList.remove('on-light') } });
       tl.fromTo('[data-portal-window]', { clipPath: start }, { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)', ease: 'power2.inOut', duration: 1 }, 0)
         .to('[data-portal-dot]', { scale: 0, opacity: 0, ease: 'power2.in', duration: .25 }, 0)
         .to('[data-portal-intro]', { opacity: 0, x: -40, ease: 'power2.in', duration: .3 }, 0)
         .fromTo('.portal__video', { scale: ctx.conditions.d ? 1.25 : 1.15 }, { scale: 1, ease: 'none', duration: 1 }, 0)
         .to('[data-portal-shade]', { opacity: 1, duration: .3, ease: 'none' }, .75);
       const words = () => $$('[data-word]').filter(w => w.offsetParent);
-      tl.add(() => {}, 1);
       const wtl = gsap.timeline({ scrollTrigger: { trigger: portal, start: '62% bottom', end: 'bottom bottom', scrub: .4 } });
       wtl.to(words(), { opacity: 1, y: 0, filter: 'blur(0px)', stagger: .25, duration: .5, ease: 'power2.out' });
       document.addEventListener('rilan:lang', () => {
@@ -366,15 +408,21 @@
   if (hs) {
     const mm = gsap.matchMedia();
     mm.add('(min-width: 900px)', () => {
+      /* Sin pin: la sección mide (recorrido + una pantalla) y su interior es sticky.
+         Así no hay salto de layout al entrar ni al salir. */
       const track = $('[data-hscroll-track]', hs);
-      const dist = () => track.scrollWidth - window.innerWidth;
-      const move = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: hs, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1 } });
+      const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
+      const size = () => { hs.style.height = (dist() + window.innerHeight) + 'px'; };
+      size();
+      ScrollTrigger.addEventListener('refreshInit', size);
+      const move = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: hs, start: 'top top', end: 'bottom bottom', scrub: .8, invalidateOnRefresh: true } });
       $$('.hs .frame img', track).forEach(img => {
         gsap.fromTo(img, { xPercent: -7 }, { xPercent: 7, ease: 'none', scrollTrigger: { trigger: img.closest('.hs'), containerAnimation: move, start: 'left right', end: 'right left', scrub: true } });
       });
       $$('.hs', track).forEach(fig => {
         gsap.fromTo(fig, { clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0%)', ease: 'expo.out', duration: 1.4, scrollTrigger: { trigger: fig, containerAnimation: move, start: 'left 92%', toggleActions: 'play none none none' } });
       });
+      return () => { ScrollTrigger.removeEventListener('refreshInit', size); hs.style.height = ''; gsap.set(track, { clearProps: 'transform' }); };
     });
   }
 
@@ -429,7 +477,7 @@
 
   /* ---------- re-división de líneas al cambiar idioma o tamaño ---------- */
   let rz, lastW = window.innerWidth;
-  const rebuild = () => { buildReveals(); ScrollTrigger.refresh(); };
+  const rebuild = () => { buildReveals(true); ScrollTrigger.refresh(); };
   document.addEventListener('rilan:lang', () => {
     rebuild();
     $$('.line > span').forEach(s => { if (s.getBoundingClientRect().top < window.innerHeight) gsap.set(s, { yPercent: 0 }); });
