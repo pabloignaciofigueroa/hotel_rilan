@@ -314,7 +314,7 @@ html[data-lang="es"] .lang__en, html[data-lang="en"] .lang__es { opacity: .62; }
 .cava__veil { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(18,19,17,.45), rgba(18,19,17,.8)); }
 .cava__content { position: relative; padding: 0 var(--gut); display: grid; gap: clamp(40px, 8vh, 80px); justify-items: center; text-align: center; }
 .cava__title { font-size: var(--fs-mega); }
-.cava__quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px clamp(40px, 8vw, 140px); max-width: 1000px; }
+.cava__quotes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px clamp(32px, 5vw, 90px); max-width: 1240px; }
 .cava__quotes p { font-size: var(--fs-lead); font-style: italic; font-weight: 300; line-height: 1.35; margin-bottom: 14px; }
 .cava__quotes footer { opacity: .95; font-size: .76rem; }
 .cava__quotes blockquote { text-shadow: 0 1px 16px rgba(18,19,17,.95), 0 0 3px rgba(18,19,17,.8); }

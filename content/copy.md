@@ -104,11 +104,10 @@ El sitio es bilingüe ES / EN con un selector. En español se usa el texto origi
 - Distancia al aeropuerto Mocopulli: 28–37 km, tal como aparece en Booking.
 - "Recomendamos llegar en auto" se eliminó porque la marca no lo publicó. Queda solo el dato de Booking: traslado al aeropuerto disponible.
 
-## Revisión del 5 oct, noche
-- El idioma por defecto es español. El sitio solo pasa a inglés si el visitante lo elige con el selector, y la elección se recuerda.
-- Las reseñas van por idioma. En español se muestran Velasquez, José, Mariana, Karen y África; en inglés, Morgan, Cezanne, Chandler, Erin y Gary. Ya no se muestran reseñas en francés ni alemán. Todas son citas literales de Booking.
-- La cava también va por idioma: en español, Gonzalez y Jaqueline; en inglés, Veronica y Chandler.
-- Portada: en español la línea inferior dice "Península de Rilán · Archipiélago de Chiloé · Chile". La bio de Instagram (en inglés) se muestra solo en la versión en inglés.
-- Mysticism: en español se usa la frase literal de IG-15 ("Árboles nativos, tierra húmeda, luz cambiante y el misticismo silencioso…"). En inglés se mantiene el texto de la destacada.
-- Los textos alternativos de imágenes y las etiquetas de accesibilidad están en los dos idiomas (`tools/alt-en.json` y atributos `data-*-en`).
-- Siguen en inglés por decisión de marca: los nombres de capítulo (Territory, Mysticism, Refuge, Heritage, igual que las destacadas) y "The Long Table" (nombre del evento).
+## Regla de idiomas (definida por Pablo, 5 oct, 23:00)
+- **El contenido de origen se deja en el idioma en que se publicó.** Reseñas de Booking en español, inglés, francés o alemán, la bio de Instagram y el texto de la destacada Mysticism (ambos en inglés) se muestran igual en las dos versiones del sitio, porque eso le da su carácter internacional. Cada cita lleva su atributo `lang`.
+- **Se traduce solo la interfaz:** menú, botones, rótulos, países, distancias, normas, textos alternativos de imágenes y etiquetas de accesibilidad.
+- Los textos de la marca publicados en los dos idiomas (posts bilingües de Instagram) usan la versión del idioma elegido.
+- El sitio abre en español. El inglés solo se activa con el selector.
+- Reseñas (un carrusel internacional): Velasquez, José, Morgan, Mariana, Patrice (FR), Cezanne, Beatrice (DE), África, Chandler, Karen y Gary.
+- La cava: Gonzalez (ES), Beatrice (DE) y Veronica (EN).
