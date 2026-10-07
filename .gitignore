@@ -6,3 +6,4 @@ dossier/shots/
 dossier/pages/
 dossier/*.pdf
 dossier/*.html
+__pycache__/
