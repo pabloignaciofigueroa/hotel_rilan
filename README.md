@@ -1,7 +1,7 @@
 # RILÁN — sitio web
 
 Sitio estático (HTML, CSS y JS) del hotel RILÁN, en la península de Rilán, Chiloé.
-Publicado con GitHub Pages: https://pabloignaciofigueroa.github.io/hotel_rilan/
+Publicado en Cloudflare Pages: https://hotelrilan.pages.dev
 
 ## Estructura
 | Ruta | Contenido |
