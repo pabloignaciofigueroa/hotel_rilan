@@ -182,7 +182,7 @@ L.append(f'''
     <p class="for">Preparado para Mónica y Rodrigo</p>
     <p class="meta">Península de Rilán · Chiloé · Octubre 2026</p>
     <p class="coords">{COORDS}</p>
-    <footer class="pf"><span>hotelrilan.vercel.app</span><span></span><span>01</span></footer>
+    <footer class="pf"><span><a href="https://hotelrilan.pages.dev/" style="color:inherit;text-decoration:none">hotelrilan.pages.dev</a></span><span></span><span>01</span></footer>
   </div>
 </article>''')
 
